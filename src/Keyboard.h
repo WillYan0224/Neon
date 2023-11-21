@@ -63,8 +63,8 @@ public:
 	void DisableAutoRepeat() noexcept;
 	bool AutorepeatEnabled() const noexcept;
 private:
-	void OnKeyPress(unsigned char keycode ) noexcept;
-	void OnKeyRelease(unsigned char keycode ) noexcept;
+	void OnKeyPressed(unsigned char keycode ) noexcept;
+	void OnKeyReleased(unsigned char keycode ) noexcept;
 	void OnChar( char character ) noexcept;
 	void ClearState() noexcept;
 	template<typename T>

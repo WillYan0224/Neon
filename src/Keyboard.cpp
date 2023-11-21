@@ -71,14 +71,14 @@ bool Keyboard::AutorepeatEnabled() const noexcept
 	return autorepeatEnabled;
 }
 
-void Keyboard::OnKeyPress(unsigned char keycode) noexcept
+void Keyboard::OnKeyPressed(unsigned char keycode) noexcept
 {
 	keystates[keycode] = true;
 	keyBuffer.push(Keyboard::Event(Keyboard::Event::Type::Press, keycode ) );
 	TrimBuffer( keyBuffer );
 }
 
-void Keyboard::OnKeyRelease(unsigned char keycode) noexcept
+void Keyboard::OnKeyReleased(unsigned char keycode) noexcept
 {
 	keystates[keycode] = false;
 	keyBuffer.push(Keyboard::Event(Keyboard::Event::Type::Release, keycode));

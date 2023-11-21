@@ -23,7 +23,7 @@ int WINAPI WinMain(
 			return -1;
 		}
 
-		return msg.wParam;
+		return static_cast<int>(msg.wParam);
 	}
 	catch (const NeonException& exception)
 	{

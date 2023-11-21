@@ -2,6 +2,8 @@
 
 #include "NeonWin.h"
 #include "NeonExcpetion.h"
+#include "Keyboard.h"
+#include "Mouse.h"
 
 #define NEONWND_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, hr )
 #define NEONWND_LAST_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, GetLastError() )
@@ -50,6 +52,10 @@ private:
 	static LRESULT CALLBACK HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	LRESULT HandleMsg( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
 
+public:
+	Keyboard kbd;
+	Mouse mouse;
+private:
 	int width;
 	int height;
 	HWND hWnd;
