@@ -114,11 +114,13 @@ private:
 
 	void OnWheelUp(int x, int y) noexcept;
 	void OnWheelDown(int x, int y) noexcept;
+	void OnWheelData(int x, int y, int delta) noexcept;
 	void TrimBuffer() noexcept;
 private:
 	static constexpr unsigned int bufferSize = 16u;
 	int x;
 	int y;
+	int wheelDataCarrier = 0;
 	bool leftIsPressed = false;
 	bool rightIsPressed = false;
 	bool midIsPressed = false;
