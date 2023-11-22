@@ -1,6 +1,7 @@
 #include "Window.h"
-#include <sstream>
 #include "resource.h"
+#include <sstream>
+#include <iomanip>
 
 // Window Class
 Window::WindowClass Window::WindowClass::wndClass;
@@ -80,6 +81,21 @@ void Window::SetTitle(const std::string& title)
 	{
 		throw NEONWND_LAST_EXCEPT();
 	}
+}
+
+std::optional<int> Window::ProcessMessages()
+{
+	MSG msg;
+	while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+	{
+		if (msg.message == WM_QUIT)
+		{
+			return msg.wParam;
+		}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+	return {};
 }
 
 

@@ -4,6 +4,8 @@
 #include "NeonExcpetion.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include <optional>
+
 
 #define NEONWND_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, hr )
 #define NEONWND_LAST_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, GetLastError() )
@@ -47,6 +49,7 @@ public:
 	Window( const Window&)  = delete; // No copy constructor
 	Window& operator=( const Window& ) = delete;
 	void SetTitle(const std::string& title);
+	static std::optional<int> ProcessMessages();
 private:	
 	// Functional programming 
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;

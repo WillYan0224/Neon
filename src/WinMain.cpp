@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <sstream>
+#include "Application.h"
 
 int WINAPI WinMain(
 	HINSTANCE hInstance,
@@ -8,49 +9,7 @@ int WINAPI WinMain(
 	int       nCmdShow)
 {
 	try {
-		Window wnd( 960, 540, "NeonDirectX" );
-
-		MSG msg;
-		BOOL gResult;
-		while ((gResult = GetMessage( &msg, nullptr, 0, 0 ) ) > 0)
-		{
-			TranslateMessage( &msg );
-			DispatchMessage( &msg );
-
-			// test code
-			static int i = 0;
-			while (!wnd.mouse.IsEmpty())
-			{
-				const auto e = wnd.mouse.Read();
-				switch (e.GetType())
-				{
-				case Mouse::Event::Type::WheelUp:
-					i++;
-					{
-						std::ostringstream oss;
-						oss << "Up: " << i;
-						wnd.SetTitle(oss.str());
-					}
-					break;
-				case Mouse::Event::Type::WheelDown:
-					i--;
-					{
-						std::ostringstream oss;
-						oss << "Down: " << i;
-						wnd.SetTitle(oss.str());
-					}
-					break;
-				}
-			}
-
-		}
-
-		if (gResult == -1)
-		{
-			return -1;
-		}
-
-		return static_cast<int>(msg.wParam);
+		return Application{}.Run();
 	}
 	catch (const NeonException& exception)
 	{
