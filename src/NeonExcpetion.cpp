@@ -3,8 +3,8 @@
 
 NeonException::NeonException( int line, const char* file ) noexcept
     :
-    line( this->line ),
-    file( this->file )
+    line( line ),
+    file( file )
 
 {
 

@@ -42,8 +42,8 @@ HINSTANCE Window::WindowClass::GetInstance() noexcept
 
 Window::Window( int width, int height, const char* name ) 
 	:
-	width(this->width),
-	height(this->height)
+	width(width),
+	height(height)
 {
 	RECT wr;
 	wr.left = 100;
@@ -73,6 +73,16 @@ Window::~Window()
 {
 	DestroyWindow( hWnd );
 }
+
+void Window::SetTitle(const std::string& title)
+{
+	if (SetWindowText(hWnd, title.c_str()) == 0)
+	{
+		throw NEONWND_LAST_EXCEPT();
+	}
+}
+
+
 // for set up only (Get ptr to instance) : installation 
 LRESULT WINAPI Window::HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept
 {
@@ -104,16 +114,26 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		return 0;
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
+
 	case WM_KILLFOCUS:
 		kbd.ClearState();
 		break;
-
 	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			DestroyWindow(hWnd);
+			break;
+		}
+		break;
 	case WM_SYSKEYDOWN:
-		if (!(lParam & 0x40000000) || kbd.AutorepeatEnabled()) 
+		if (!(lParam & 0x40000000) || kbd.AutorepeatEnabled())
 		{
 			kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
 		}
@@ -129,12 +149,12 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_MOUSEMOVE:
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
-		// in client region -> log move, and log enter + capture mouse (if not previously in window)
+		// in client region -> log move, and log enter + capture mouse 
 		if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
 		{
 			mouse.OnMouseMove(pt.x, pt.y);
 			if (!mouse.IsInWindow())
-			{
+			{	
 				SetCapture(hWnd);
 				mouse.OnMouseEnter();
 			}
@@ -142,7 +162,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		// not in client -> log move / maintain capture if button down
 		else
 		{
-			if (wParam & (MK_LBUTTON | MK_RBUTTON))
+			if (wParam & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON))
 			{
 				mouse.OnMouseMove(pt.x, pt.y);
 			}
@@ -222,6 +242,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
+
 }
 // Window Exception
 Window::Exception::Exception(int line, const char* file, HRESULT hr ) noexcept

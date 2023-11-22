@@ -24,7 +24,7 @@ public:
 		{}
 		Event( Type type, unsigned code ) noexcept
 			:
-			type( this->type ), code( this->code )
+			type( type ), code( code )
 		{}
 		bool IsPress() const noexcept
 		{

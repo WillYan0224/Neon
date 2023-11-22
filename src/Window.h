@@ -46,7 +46,8 @@ public:
 	~Window();
 	Window( const Window&)  = delete; // No copy constructor
 	Window& operator=( const Window& ) = delete;
-private:
+	void SetTitle(const std::string& title);
+private:	
 	// Functional programming 
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
 	static LRESULT CALLBACK HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;

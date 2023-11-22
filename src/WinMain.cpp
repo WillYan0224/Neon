@@ -1,5 +1,5 @@
 #include "Window.h"
-
+#include <sstream>
 
 int WINAPI WinMain(
 	HINSTANCE hInstance,
@@ -8,7 +8,7 @@ int WINAPI WinMain(
 	int       nCmdShow)
 {
 	try {
-		Window wnd( 1920, 1080, "NeonDirectX" );
+		Window wnd( 960, 540, "NeonDirectX" );
 
 		MSG msg;
 		BOOL gResult;
@@ -16,6 +16,26 @@ int WINAPI WinMain(
 		{
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
+
+			// test code
+			while (!wnd.mouse.IsEmpty())
+			{
+				const auto e = wnd.mouse.Read();
+				switch (e.GetType())
+				{
+				case Mouse::Event::Type::Leave:
+					wnd.SetTitle("Gone!");
+					break;
+				case Mouse::Event::Type::Move:
+				{
+					std::ostringstream oss;
+					oss << "Mouse moved to (" << e.GetPosX() << "," << e.GetPosY() << ")";
+					wnd.SetTitle(oss.str());
+				}
+				break;
+				}
+			}
+
 		}
 
 		if (gResult == -1)
