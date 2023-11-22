@@ -4,8 +4,9 @@
 #include "NeonExcpetion.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Graphics.h"
 #include <optional>
-
+#include <memory>
 
 #define NEONWND_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, hr )
 #define NEONWND_LAST_EXCEPT( hr ) Window::Exception( __LINE__, __FILE__, GetLastError() )
@@ -50,6 +51,7 @@ public:
 	Window& operator=( const Window& ) = delete;
 	void SetTitle(const std::string& title);
 	static std::optional<int> ProcessMessages();
+	Graphics& Gfx();
 private:	
 	// Functional programming 
 	static LRESULT CALLBACK HandleMsgSetup( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam ) noexcept;
@@ -63,4 +65,5 @@ private:
 	int width;
 	int height;
 	HWND hWnd;
+	std::unique_ptr<Graphics>  pGfx;
 };

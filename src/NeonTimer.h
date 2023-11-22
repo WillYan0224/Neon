@@ -5,9 +5,9 @@
 class NeonTimer
 {
 public:
-	NeonTimer();
-	float Peek() const;
-	float Mark();
+	NeonTimer() noexcept;
+	float Peek() const noexcept;
+	float Mark() noexcept;
 private:
 	std::chrono::steady_clock::time_point last;
 };

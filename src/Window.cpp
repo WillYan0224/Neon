@@ -68,6 +68,8 @@ Window::Window( int width, int height, const char* name )
 		throw NEONWND_LAST_EXCEPT();
 	}
 	ShowWindow( hWnd, SW_SHOWDEFAULT );
+	// create graphics object
+	pGfx = std::make_unique<Graphics>(hWnd);
 }
 
 Window::~Window()
@@ -90,12 +92,17 @@ std::optional<int> Window::ProcessMessages()
 	{
 		if (msg.message == WM_QUIT)
 		{
-			return msg.wParam;
+			return static_cast<int>(msg.wParam);
 		}
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
 	return {};
+}
+
+Graphics& Window::Gfx()
+{
+	return *pGfx;
 }
 
 

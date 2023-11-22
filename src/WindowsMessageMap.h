@@ -7,7 +7,7 @@
 class WindowsMessageMap
 {
 public:
-	WindowsMessageMap();
+	WindowsMessageMap() noexcept;
 	std::string operator()(DWORD msg, LPARAM lParam, WPARAM wParam) const;
 private:
 	std::unordered_map<DWORD, std::string> map;
