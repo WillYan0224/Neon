@@ -42,6 +42,12 @@
     <ClCompile Include="src\Graphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\dxerr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DxgiInfoManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\NeonWin.h">
@@ -74,6 +80,12 @@
     <ClInclude Include="src\Graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\dxerr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DxgiInfoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NeonDX.rc">
@@ -84,5 +96,16 @@
     <Image Include="src\res\neon_logo.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\DXTrace.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="src\DXGetErrorString.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="src\DXGetErrorDescription.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

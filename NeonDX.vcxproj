@@ -81,6 +81,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\dxerr.cpp" />
+    <ClCompile Include="src\DxgiInfoManager.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\Mouse.cpp" />
     <ClCompile Include="src\Keyboard.cpp" />
@@ -92,6 +94,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\dxerr.h" />
+    <ClInclude Include="src\DxgiInfoManager.h" />
     <ClInclude Include="src\Graphics.h" />
     <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\Keyboard.h" />
@@ -107,6 +111,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\res\neon_logo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\DXGetErrorDescription.inl" />
+    <None Include="src\DXGetErrorString.inl" />
+    <None Include="src\DXTrace.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
