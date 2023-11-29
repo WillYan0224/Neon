@@ -4,6 +4,7 @@
 #include "DxgiInfoManager.h"
 #include <vector>
 #include "d3d11.h"
+#include "wrl.h"
 
 class Graphics
 {
@@ -22,8 +23,19 @@ public:
 		std::string GetErrorString() const noexcept;
 		std::string GetErrorDescription() const noexcept;
 		std::string GetErrorInfo() const noexcept;
+
 	private:
 		HRESULT hr;
+		std::string info;
+	};
+	class InfoException : public Exception
+	{
+	public:
+		InfoException(int line, const char* file, std::vector<std::string> infoMsgs) noexcept;
+		const char* what() const noexcept override;
+		const char* GetType() const noexcept override;
+		std::string GetErrorInfo() const noexcept;
+	private:
 		std::string info;
 	};
 	class DeviceRemovedException : public HrException
@@ -38,12 +50,16 @@ public:
 	Graphics(HWND hWnd);
 	Graphics(const Graphics&) = delete; // no copy constructor
 	Graphics& operator=(const Graphics&) = delete; // no copy constructor
-	~Graphics();
+	~Graphics() = default;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue);
+	void DrawTestTriangle();
 private:
-	IDXGISwapChain* pSwapChain = nullptr;
-	ID3D11Device* pDevice = nullptr;
-	ID3D11DeviceContext* pDeviceContext = nullptr;
-	ID3D11RenderTargetView* pMainRtv = nullptr;
+#ifndef NDEBUG
+	DxgiInfoManager infoManager;
+#endif
+	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Device> pDevice = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pMainRtv = nullptr;
 };
