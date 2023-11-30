@@ -106,14 +106,18 @@ void Graphics::DrawTestTriangle()
 	{
 		float x;
 		float y;
+
+		float r;
+		float g;
+		float b;
 	};
 
 	// create vertex buffer (1 2d triangle at center of screen)
 	const Vertex vertices[] =
 	{
-		{ 0.0f,0.5f },
-		{ 0.5f,-0.5f },
-		{ -0.5f,-0.5f },
+		{  0.0f,  0.5f, 1.0f, 0.0f, 0.0f },
+		{  0.5f, -0.5f, 0.0f, 1.0f, 0.0f },
+		{ -0.5f, -0.5f,	0.0f, 0.0f, 1.0f },
 	};
 	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
 	D3D11_BUFFER_DESC bd = {};
@@ -161,6 +165,7 @@ void Graphics::DrawTestTriangle()
 	const D3D11_INPUT_ELEMENT_DESC ieDesc[] =
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 	GFX_THROW_INFO(pDevice->CreateInputLayout(ieDesc, static_cast<UINT>(std::size(ieDesc)), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout));
 	
@@ -168,7 +173,7 @@ void Graphics::DrawTestTriangle()
 	pDeviceContext->IASetInputLayout(pInputLayout.Get());
 
 	// bind primitive topology
-	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	// create pixel shader
 	ComPtr<ID3D11PixelShader> pPixelShader;
@@ -182,7 +187,7 @@ void Graphics::DrawTestTriangle()
 	// bind render targets
 	pDeviceContext->OMSetRenderTargets(1, pMainRtv.GetAddressOf(), nullptr);
 
-	GFX_THROW_INFO_ONLY(pDeviceContext->Draw((UINT)std::size(vertices), 0u));
+	GFX_THROW_INFO_ONLY(pDeviceContext->Draw(static_cast<UINT>(std::size(vertices)), 0u));
 }
 
 // Graphics exception stuff
