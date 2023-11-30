@@ -2,10 +2,12 @@
 #include "dxerr.h"
 #include <sstream>
 #include "DxgiInfoManager.h"
+#include <d3dcompiler.h>
 
 using namespace Microsoft::WRL;
 
 #pragma comment(lib,"d3d11.lib")
+#pragma comment(lib,"D3DCompiler.lib")
 
 // graphics exception checking/throwing macros (some with dxgi infos)
 #define GFX_EXCEPT_NOINFO(hr) Graphics::HrException( __LINE__,__FILE__,(hr) )
@@ -95,7 +97,6 @@ void Graphics::EndFrame()
 	}
 }
 
-
 void Graphics::DrawTestTriangle()
 {
 	namespace wrl = Microsoft::WRL;
@@ -131,7 +132,17 @@ void Graphics::DrawTestTriangle()
 	const UINT offset = 0u;
 	pDeviceContext->IASetVertexBuffers(0u, 1u, &pVertexBuffer, &stride, &offset);
 
-	GFX_THROW_INFO_ONLY(pDeviceContext->Draw(3u, 0u));
+
+	// create vertex shader
+	ComPtr<ID3D11VertexShader> pVertexShader;
+	ComPtr<ID3DBlob> pBlob;
+	GFX_THROW_INFO(D3DReadFileToBlob(L"src\\VertexShader.cso", &pBlob));
+	GFX_THROW_INFO(pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
+	
+	// bind vertex shader
+	pDeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
+	
+	GFX_THROW_INFO_ONLY(pDeviceContext->Draw((UINT)std::size(vertices), 0u));
 }
 
 // Graphics exception stuff
@@ -172,7 +183,7 @@ const char* Graphics::HrException::what() const noexcept
 
 const char* Graphics::HrException::GetType() const noexcept
 {
-	return "Chili Graphics Exception";
+	return "Graphics Exception";
 }
 
 HRESULT Graphics::HrException::GetErrorCode() const noexcept
