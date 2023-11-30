@@ -137,11 +137,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 {
 	switch (msg)
 	{
-#ifdef NDEBUG
-	case WM_DESTROY:
-#endif
-		PostQuitMessage(0);
-		return 0;
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
@@ -153,7 +148,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		switch (wParam)
 		{
 		case VK_ESCAPE:
-			DestroyWindow(hWnd);
+			PostQuitMessage(0);
 			break;
 		}
 		break;

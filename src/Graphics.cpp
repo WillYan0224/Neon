@@ -132,6 +132,7 @@ void Graphics::DrawTestTriangle()
 	const UINT offset = 0u;
 	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
 
+
 	// set Viewport(s) as RS
 	D3D11_VIEWPORT viewport;
 	viewport.TopLeftX = 0.0f;
@@ -140,8 +141,10 @@ void Graphics::DrawTestTriangle()
 	viewport.MaxDepth = 1.0f;
 	viewport.Height = 540;
 	viewport.Width = 960;
+
 	// bind viewport
 	pDeviceContext->RSSetViewports(1u, &viewport);
+
 
 	// create vertex shader
 	ComPtr<ID3D11VertexShader> pVertexShader;
@@ -151,7 +154,22 @@ void Graphics::DrawTestTriangle()
 
 	// bind vertex shader
 	pDeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
+
+
+	// create input layout (vertex shader)
+	ComPtr<ID3D11InputLayout> pInputLayout;
+	const D3D11_INPUT_ELEMENT_DESC ieDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+	GFX_THROW_INFO(pDevice->CreateInputLayout(ieDesc, static_cast<UINT>(std::size(ieDesc)), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout));
 	
+	// bind vertex input
+	pDeviceContext->IASetInputLayout(pInputLayout.Get());
+
+	// bind primitive topology
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
 	// create pixel shader
 	ComPtr<ID3D11PixelShader> pPixelShader;
 	GFX_THROW_INFO(D3DReadFileToBlob(L"src\\PixelShader.cso", &pBlob));
@@ -160,6 +178,7 @@ void Graphics::DrawTestTriangle()
 	// bind pixel shader
 	pDeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
 	
+
 	// bind render targets
 	pDeviceContext->OMSetRenderTargets(1, pMainRtv.GetAddressOf(), nullptr);
 
