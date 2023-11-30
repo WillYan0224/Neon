@@ -1,3 +1,4 @@
 # Directories
 .vs/
 x64/
+*.cso
