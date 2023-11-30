@@ -104,21 +104,31 @@ void Graphics::DrawTestTriangle()
 
 	struct Vertex
 	{
-		float x;
-		float y;
-
-		float r;
-		float g;
-		float b;
+		struct 
+		{
+			float x;
+			float y;
+		}pos;
+		struct 
+		{
+			float r;
+			float g;
+			float b;
+		}color;
 	};
 
-	// create vertex buffer (1 2d triangle at center of screen)
+	// create vertex buffer
 	const Vertex vertices[] =
 	{
 		{  0.0f,  0.5f, 1.0f, 0.0f, 0.0f },
 		{  0.5f, -0.5f, 0.0f, 1.0f, 0.0f },
 		{ -0.5f, -0.5f,	0.0f, 0.0f, 1.0f },
+		{ -0.3f,  0.3f,	0.0f, 0.0f, 1.0f },
+		{  0.3f,  0.3f, 0.0f, 1.0f, 0.0f },
+		{  0.0f, -0.8f, 1.0f, 0.0f, 0.0f },
+
 	};
+
 	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
 	D3D11_BUFFER_DESC bd = {};
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -128,8 +138,36 @@ void Graphics::DrawTestTriangle()
 	bd.ByteWidth = sizeof(vertices);
 	bd.StructureByteStride = sizeof(Vertex);
 	D3D11_SUBRESOURCE_DATA sd = {};
+	ZeroMemory(&sd, sizeof(sd));
 	sd.pSysMem = vertices;
 	GFX_THROW_INFO(pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
+
+
+	// create indices buffer
+	const unsigned short indices[] =
+	{
+		0, 1, 2,
+		0, 2, 3,
+		0, 4, 1,
+		2, 1, 5,
+	};
+	ComPtr<ID3D11Buffer> pIndexBuffer;
+	D3D11_BUFFER_DESC ibd = {};
+	ZeroMemory(&ibd, sizeof(ibd));
+	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibd.Usage = D3D11_USAGE_DEFAULT;
+	ibd.CPUAccessFlags = 0u;
+	ibd.MiscFlags = 0u;
+	ibd.ByteWidth = sizeof(indices);
+	ibd.StructureByteStride = sizeof(unsigned short);
+	D3D11_SUBRESOURCE_DATA isd = {};
+	ZeroMemory(&isd, sizeof(sd));
+	isd.pSysMem = indices;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&ibd, &isd, &pIndexBuffer));
+	
+	// Bind index buffer to pipeline
+	pDeviceContext->IASetIndexBuffer(pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0u);
+
 
 	// Bind vertex buffer to pipeline
 	const UINT stride = sizeof(Vertex);
@@ -187,7 +225,10 @@ void Graphics::DrawTestTriangle()
 	// bind render targets
 	pDeviceContext->OMSetRenderTargets(1, pMainRtv.GetAddressOf(), nullptr);
 
-	GFX_THROW_INFO_ONLY(pDeviceContext->Draw(static_cast<UINT>(std::size(vertices)), 0u));
+
+	// GFX_THROW_INFO_ONLY(pDeviceContext->Draw(static_cast<UINT>(std::size(vertices)), 0u));
+	GFX_THROW_INFO_ONLY(pDeviceContext->DrawIndexed(static_cast<UINT>(std::size(indices)), 0u, 0u));
+
 }
 
 // Graphics exception stuff

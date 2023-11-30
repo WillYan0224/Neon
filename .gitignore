@@ -1,4 +1,6 @@
 # Directories
-*.cso
 .vs/
 x64/
+
+# Object files
+*.cso
