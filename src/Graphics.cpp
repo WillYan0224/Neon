@@ -126,7 +126,6 @@ void Graphics::DrawTestTriangle()
 		{ -0.3f,  0.3f,	0.0f, 0.0f, 1.0f },
 		{  0.3f,  0.3f, 0.0f, 1.0f, 0.0f },
 		{  0.0f, -0.8f, 1.0f, 0.0f, 0.0f },
-
 	};
 
 	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
@@ -196,7 +195,7 @@ void Graphics::DrawTestTriangle()
 
 	// bind vertex shader
 	pDeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
-
+	
 
 	// create input layout (vertex shader)
 	ComPtr<ID3D11InputLayout> pInputLayout;
