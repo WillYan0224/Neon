@@ -85,7 +85,6 @@ public:
 		}
 	};
 public:
-public:
 	Mouse() = default;
 	Mouse(const Mouse&) = delete;
 	Mouse& operator=(const Mouse&) = delete;

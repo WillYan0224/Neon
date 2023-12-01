@@ -1,5 +1,6 @@
 #include <queue>
 #include <bitset>
+#include <optional>
 
 class Keyboard
 {
@@ -49,16 +50,16 @@ public:
 	Keyboard& operator=( const Keyboard& ) = delete;
 	// key event
 	bool KeyIsPressed(unsigned char keycode) const noexcept;
-	Event ReadKey() noexcept;
+	std::optional<Event> ReadKey() noexcept;
 	bool KeyIsEmpty() const noexcept;
 	void FlushKey() noexcept;
 	// char event
-	char ReadChar() noexcept;
+	std::optional<char> ReadChar() noexcept;
 	bool CharIsEmpty() const noexcept;
 	void FlushChar() noexcept;
 	
 	void Flush() noexcept;
-	// autorepate control
+	// autorepeat control
 	void EnableAutoRepeat() noexcept;
 	void DisableAutoRepeat() noexcept;
 	bool AutorepeatEnabled() const noexcept;
