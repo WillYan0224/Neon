@@ -4,6 +4,8 @@
 #include "DxgiInfoManager.h"
 #include <d3dcompiler.h>
 
+#include <cmath>
+
 using namespace Microsoft::WRL;
 
 #pragma comment(lib,"d3d11.lib")
@@ -128,8 +130,44 @@ void Graphics::DrawTestTriangle()
 		{  0.0f, -0.8f, 1.0f, 0.0f, 0.0f },
 	};
 
-	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
+	// create constant buffer
+	struct VB_CB_Offset2D
+	{
+		float x;
+		float y;
+	};
+	VB_CB_Offset2D offset2D[] =
+	{
+		{ 0.0f, 0.0f },
+	};
+	
+	// create constant buffer (dynamic)
+	ComPtr<ID3D11Buffer> pConstantBufferVSOffset;
+	D3D11_BUFFER_DESC cbd = {};
+	ZeroMemory(&cbd, sizeof(cbd));
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.Usage = D3D11_USAGE_DYNAMIC;
+	cbd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbd.MiscFlags = 0u;
+	cbd.ByteWidth = sizeof(offset2D) + (16 - sizeof(offset2D) % 16);
+	cbd.StructureByteStride = sizeof(VB_CB_Offset2D);
+	D3D11_SUBRESOURCE_DATA csd = {};
+	ZeroMemory(&csd, sizeof(csd));
+	csd.pSysMem = offset2D;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd, &csd, &pConstantBufferVSOffset));
+	
+	offset2D[0].x += 0.5f;
+	// apply change
+	D3D11_MAPPED_SUBRESOURCE mappedCBOffset;
+	pDeviceContext->Map(pConstantBufferVSOffset.Get(), 0u, D3D11_MAP_WRITE_DISCARD, 0u, &mappedCBOffset);
+	CopyMemory(mappedCBOffset.pData, offset2D, sizeof(VB_CB_Offset2D));
+	pDeviceContext->Unmap(pConstantBufferVSOffset.Get(), 0u);
+
+
+	// create vertex buffer
+	ComPtr<ID3D11Buffer> pVertexBuffer;
 	D3D11_BUFFER_DESC bd = {};
+	ZeroMemory(&bd, sizeof(bd));
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.CPUAccessFlags = 0u;
@@ -172,7 +210,7 @@ void Graphics::DrawTestTriangle()
 	const UINT stride = sizeof(Vertex);
 	const UINT offset = 0u;
 	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
-
+	pDeviceContext->VSSetConstantBuffers(0, 1, pConstantBufferVSOffset.GetAddressOf());
 
 	// set Viewport(s) as RS
 	D3D11_VIEWPORT viewport;
