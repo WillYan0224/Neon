@@ -1,9 +1,3 @@
-cbuffer cbPerVertex
-{
-    float x;
-    float y;
-};
-
 struct VSOut
 {
     float4 pos : SV_Position;
@@ -13,7 +7,7 @@ struct VSOut
 VSOut main(float2 pos : POSITION, float3 color : COLOR)
 {
     VSOut vsOut = (VSOut)0;
-    vsOut.pos = float4(pos.x + x, pos.y + y, 0.0f, 1.0f);
+    vsOut.pos = float4(pos.x, pos.y, 0.0f, 1.0f);
     vsOut.color = color;
     return vsOut;
 }
