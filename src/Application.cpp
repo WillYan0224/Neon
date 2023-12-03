@@ -26,8 +26,8 @@ void Application::DoFrame()
 	wnd.Gfx().ClearBuffer(color, color, 1.0);
 	wnd.Gfx().DrawTestTriangle(
 		timer.Peek(),
-		wnd.mouse.GetPosX(),
-		wnd.mouse.GetPosY()
+		(wnd.mouse.GetPosX() / 480.0f) - 1.0f,
+		(-wnd.mouse.GetPosY() / 240.0f) + 1.0f
 	);
 	wnd.Gfx().EndFrame();
 }
