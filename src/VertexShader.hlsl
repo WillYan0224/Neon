@@ -1,6 +1,6 @@
 cbuffer cb
 {
-    row_major matrix transform;
+    matrix transform;
 };
 
 struct VSOut

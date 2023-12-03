@@ -24,6 +24,10 @@ void Application::DoFrame()
 	
 	const float color = sin(timer.Peek()) / 2.0f + 0.5f;
 	wnd.Gfx().ClearBuffer(color, color, 1.0);
-	wnd.Gfx().DrawTestTriangle(timer.Peek());
+	wnd.Gfx().DrawTestTriangle(
+		timer.Peek(),
+		wnd.mouse.GetPosX(),
+		wnd.mouse.GetPosY()
+	);
 	wnd.Gfx().EndFrame();
 }

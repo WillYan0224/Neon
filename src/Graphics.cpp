@@ -3,10 +3,10 @@
 #include <sstream>
 #include "DxgiInfoManager.h"
 #include <d3dcompiler.h>
-#include <cmath>
+#include <DirectXMath.h>
 
 using namespace Microsoft::WRL;
-
+namespace DX = DirectX;
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"D3DCompiler.lib")
 
@@ -98,7 +98,7 @@ void Graphics::EndFrame()
 	}
 }
 
-void Graphics::DrawTestTriangle(float angle)
+void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 {
 	namespace wrl = Microsoft::WRL;
 	HRESULT hr;
@@ -121,10 +121,7 @@ void Graphics::DrawTestTriangle(float angle)
 	// cb defination
 	struct ConstantBuffer
 	{
-		struct
-		{
-			float element[4][4];
-		}transformation;
+		DX::XMMATRIX transform;
 	};
 
 	// create vertex buffer
@@ -155,10 +152,11 @@ void Graphics::DrawTestTriangle(float angle)
 	ConstantBuffer cb =
 	{
 		{
-			std::cos(angle),	std::sin(angle),	0.0f,	0.0f,
-			-std::sin(angle),	std::cos(angle),	0.0f,	0.0f,
-			0.0f,				0.0f,				1.0f,	0.0f,
-			0.0f,				0.0f,				0.0f,	1.0f,
+			DX::XMMatrixTranspose(
+				DX::XMMatrixRotationZ(angle) * 
+				DX::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f) *
+				DX::XMMatrixTranslation(mouseX, mouseY, 0.0f)
+			)
 		},
 	};
 
