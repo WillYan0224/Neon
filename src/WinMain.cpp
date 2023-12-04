@@ -14,7 +14,6 @@ int WINAPI WinMain(
 	catch (const NeonException& exception)
 	{
 		MessageBox(nullptr, exception.what(), exception.GetType(), MB_OK | MB_ICONEXCLAMATION);
-		
 	}
 	catch (std::exception& exception)
 	{

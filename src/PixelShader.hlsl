@@ -1,10 +1,9 @@
-struct VSOut
+cbuffer faceColor
 {
-    float4 pos : SV_Position;
-    float3 color : COLOR;
+    float4 color_face[6];
 };
 
-float4 main(VSOut vsout) : SV_TARGET
+float4 main(uint tid : SV_PrimitiveID) : SV_TARGET
 {
-    return float4(vsout.color, 1.0f);
+    return color_face[tid / 2];
 }

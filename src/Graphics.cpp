@@ -105,20 +105,15 @@ void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 
 	struct Vertex
 	{
-		struct 
+		struct
 		{
 			float x;
 			float y;
+			float z;
 		}pos;
-		struct 
-		{
-			float r;
-			float g;
-			float b;
-		}color;
 	};
 
-	// cb defination
+	// cb for transformation 
 	struct ConstantBuffer
 	{
 		DX::XMMATRIX transform;
@@ -127,15 +122,17 @@ void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 	// create vertex buffer
 	const Vertex vertices[] =
 	{
-		{  0.0f,  0.5f, 1.0f, 0.0f, 0.0f },
-		{  0.5f, -0.5f, 0.0f, 1.0f, 0.0f },
-		{ -0.5f, -0.5f,	0.0f, 0.0f, 1.0f },
-		{ -0.3f,  0.3f,	0.0f, 0.0f, 1.0f },
-		{  0.3f,  0.3f, 0.0f, 1.0f, 0.0f },
-		{  0.0f, -0.8f, 1.0f, 0.0f, 0.0f },
+		{ -1.0f, -1.0f, -1.0f},
+		{  1.0f, -1.0f, -1.0f},
+		{ -1.0f,  1.0f, -1.0f},
+		{  1.0f,  1.0f, -1.0f},
+		{ -1.0f, -1.0f, 1.0f},
+		{  1.0f, -1.0f, 1.0f},
+		{ -1.0f,  1.0f, 1.0f},
+		{  1.0f,  1.0f, 1.0f},
 	};
 
-	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
+	ComPtr<ID3D11Buffer> pVertexBuffer;
 	D3D11_BUFFER_DESC bd = {};
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -148,14 +145,17 @@ void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 	sd.pSysMem = vertices;
 	GFX_THROW_INFO(pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
 
-
-	ConstantBuffer cb =
+	// M(V)P Matrix
+	ConstantBuffer cb = 
 	{
 		{
 			DX::XMMatrixTranspose(
-				DX::XMMatrixRotationZ(angle) * 
-				DX::XMMatrixScaling(3.0f / 4.0f, 1.0f, 1.0f) *
-				DX::XMMatrixTranslation(mouseX, mouseY, 0.0f)
+				(
+				DX::XMMatrixRotationZ(angle) *
+				DX::XMMatrixRotationX(angle) *
+				DX::XMMatrixTranslation(mouseX, mouseY, 4.0f)
+				) *
+				DX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f)
 			)
 		},
 	};
@@ -179,13 +179,55 @@ void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 	pDeviceContext->VSSetConstantBuffers(0u, 1u, pConstantBuffer.GetAddressOf());
 
 
+	// cb for face colors (look-up table)
+	struct ConstantBuffer2 // 4's components law 
+	{
+		struct
+		{
+			float r;
+			float g;
+			float b;
+			float a;
+		}face_color[6];
+	};
+	const ConstantBuffer2 color =
+	{
+		{
+			{1.0f, 0.0f, 1.0f, 1.0f}, // purple
+			{1.0f, 0.0f, 0.0f, 1.0f}, // red 
+			{0.0f, 1.0f, 0.0f, 1.0f}, // green
+			{0.0f, 0.0f, 1.0f, 1.0f}, // blue
+			{1.0f, 1.0f, 0.0f, 1.0f}, // yellow
+			{0.0f, 1.0f, 1.0f, 1.0f}, // cyan
+		}
+	};
+	ComPtr<ID3D11Buffer> pConstantBuffer2;
+	D3D11_BUFFER_DESC cbd2 = {};
+	ZeroMemory(&cbd2, sizeof(cbd2));
+	cbd2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd2.Usage = D3D11_USAGE_DYNAMIC;
+	cbd2.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	cbd2.MiscFlags = 0u;
+	cbd2.ByteWidth = sizeof(color);
+	cbd2.StructureByteStride = sizeof(ConstantBuffer2);
+	D3D11_SUBRESOURCE_DATA csd2 = {};
+	ZeroMemory(&csd2, sizeof(csd2));
+	csd2.pSysMem = &color;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&cbd2, &csd2, pConstantBuffer2.GetAddressOf()));
+	
+	// bind constant buffer to pixel shader
+	pDeviceContext->PSSetConstantBuffers(0u, 1u, pConstantBuffer2.GetAddressOf());
+
+
 	// create indices buffer
 	const unsigned short indices[] =
 	{
-		0, 1, 2,
-		0, 2, 3,
-		0, 4, 1,
-		2, 1, 5,
+		0,2,1,	2,3,1,
+		1,3,5,	3,7,5,
+		2,6,3,	3,6,7,
+		4,5,7,	4,7,6,
+		0,4,2,	2,4,6,
+		0,1,4,	1,5,4
 	};
 	ComPtr<ID3D11Buffer> pIndexBuffer;
 	D3D11_BUFFER_DESC ibd = {};
@@ -238,8 +280,7 @@ void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 	ComPtr<ID3D11InputLayout> pInputLayout;
 	const D3D11_INPUT_ELEMENT_DESC ieDesc[] =
 	{
-		{"POSITION", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 8u, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 	GFX_THROW_INFO(pDevice->CreateInputLayout(ieDesc, static_cast<UINT>(std::size(ieDesc)), pBlob->GetBufferPointer(), pBlob->GetBufferSize(), &pInputLayout));
 	
