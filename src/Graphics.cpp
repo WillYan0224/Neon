@@ -71,12 +71,50 @@ Graphics::Graphics( HWND hWnd)
 	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
 	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pMainRtv));
+
+	// Create depth stencil state
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	ZeroMemory(&dsDesc, sizeof(dsDesc));
+	dsDesc.DepthEnable = true;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	ComPtr<ID3D11DepthStencilState> pDSState;
+	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, pDSState.GetAddressOf()));
+	// bind depth stencil state 
+	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
+
+	// create depth stencil texture2D
+	ComPtr<ID3D11Texture2D> pDepthStencil;
+	D3D11_TEXTURE2D_DESC depthDesc = {};
+	ZeroMemory(&depthDesc, sizeof(depthDesc));
+	depthDesc.Width = 960u;
+	depthDesc.Height = 540u;
+	depthDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthDesc.ArraySize = 1u;
+	depthDesc.MipLevels = 1u;
+	depthDesc.SampleDesc.Count = 1u;
+	depthDesc.SampleDesc.Quality = 0u;
+	GFX_THROW_INFO(pDevice->CreateTexture2D(&depthDesc, nullptr, pDepthStencil.GetAddressOf()));
+
+	// create depth stencil view desc
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+	ZeroMemory(&dsvDesc, sizeof(dsvDesc));
+	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvDesc.Texture2D.MipSlice = 0u;
+	GFX_THROW_INFO(pDevice->CreateDepthStencilView(pDepthStencil.Get(), &dsvDesc, pDSV.GetAddressOf()));
+
+	// bind render targets and depth stencil 
+	pDeviceContext->OMSetRenderTargets(1u, pMainRtv.GetAddressOf(), pDSV.Get());
 }
 
 void Graphics::ClearBuffer(float red, float green, float blue)
 {
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pMainRtv.Get(), color);
+	pDeviceContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
 void Graphics::EndFrame()
@@ -297,11 +335,6 @@ void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 	
 	// bind pixel shader
 	pDeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
-	
-
-	// bind render targets
-	pDeviceContext->OMSetRenderTargets(1, pMainRtv.GetAddressOf(), nullptr);
-
 
 	// GFX_THROW_INFO_ONLY(pDeviceContext->Draw(static_cast<UINT>(std::size(vertices)), 0u));
 	GFX_THROW_INFO_ONLY(pDeviceContext->DrawIndexed(static_cast<UINT>(std::size(indices)), 0u, 0u));
