@@ -86,6 +86,12 @@
     <ClInclude Include="src\DxgiInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\GraphicsMacro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WindowMacro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NeonDX.rc">

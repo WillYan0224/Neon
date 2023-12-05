@@ -93,6 +93,7 @@
     <ClCompile Include="src\WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GraphicsMacro.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\dxerr.h" />
     <ClInclude Include="src\DxgiInfoManager.h" />
@@ -105,6 +106,7 @@
     <ClInclude Include="src\NeonWin.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\WindowsMessageMap.h" />
+    <ClInclude Include="src\WindowMacro.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NeonDX.rc" />

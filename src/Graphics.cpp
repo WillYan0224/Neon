@@ -4,27 +4,12 @@
 #include "DxgiInfoManager.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
+#include "GraphicsMacro.h"
 
 using namespace Microsoft::WRL;
 namespace DX = DirectX;
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"D3DCompiler.lib")
-
-// graphics exception checking/throwing macros (some with dxgi infos)
-#define GFX_EXCEPT_NOINFO(hr) Graphics::HrException( __LINE__,__FILE__,(hr) )
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HrException( __LINE__,__FILE__,hr )
-
-#ifndef NDEBUG
-#define GFX_EXCEPT(hr) Graphics::HrException( __LINE__,__FILE__,(hr),infoManager.GetMessages() )
-#define GFX_THROW_INFO(hrcall) infoManager.Set(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
-#define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,__FILE__,(hr),infoManager.GetMessages() )
-#define GFX_THROW_INFO_ONLY(call) infoManager.Set(); (call); {auto v = infoManager.GetMessages(); if(!v.empty()) {throw Graphics::InfoException( __LINE__,__FILE__,v);}}
-#else
-#define GFX_EXCEPT(hr) Graphics::HrException( __LINE__,__FILE__,(hr) )
-#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
-#define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,__FILE__,(hr) )
-#define GFX_THROW_INFO_ONLY(call) (call)
-#endif
 
 Graphics::Graphics( HWND hWnd)
 {
@@ -79,7 +64,7 @@ Graphics::Graphics( HWND hWnd)
 	dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	ComPtr<ID3D11DepthStencilState> pDSState;
-	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, pDSState.GetAddressOf()));
+	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, &pDSState));
 	// bind depth stencil state 
 	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
 
@@ -96,7 +81,7 @@ Graphics::Graphics( HWND hWnd)
 	depthDesc.MipLevels = 1u;
 	depthDesc.SampleDesc.Count = 1u;
 	depthDesc.SampleDesc.Quality = 0u;
-	GFX_THROW_INFO(pDevice->CreateTexture2D(&depthDesc, nullptr, pDepthStencil.GetAddressOf()));
+	GFX_THROW_INFO(pDevice->CreateTexture2D(&depthDesc, nullptr, &pDepthStencil));
 
 	// create depth stencil view desc
 	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
@@ -104,7 +89,7 @@ Graphics::Graphics( HWND hWnd)
 	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
 	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	dsvDesc.Texture2D.MipSlice = 0u;
-	GFX_THROW_INFO(pDevice->CreateDepthStencilView(pDepthStencil.Get(), &dsvDesc, pDSV.GetAddressOf()));
+	GFX_THROW_INFO(pDevice->CreateDepthStencilView(pDepthStencil.Get(), &dsvDesc, &pDSV));
 
 	// bind render targets and depth stencil 
 	pDeviceContext->OMSetRenderTargets(1u, pMainRtv.GetAddressOf(), pDSV.Get());
