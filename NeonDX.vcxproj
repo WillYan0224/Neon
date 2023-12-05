@@ -47,7 +47,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_MBCS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_MBCS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);IS_DEBUG=true</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -65,7 +65,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_MBCS;NDEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_MBCS;NDEBUG;_MBCS;%(PreprocessorDefinitions);IS_DEBUG = false;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -80,6 +80,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Drawable.cpp" />
+    <ClCompile Include="src\Cube.cpp" />
+    <ClCompile Include="src\InputLayout.cpp" />
+    <ClCompile Include="src\PixelShader.cpp" />
+    <ClCompile Include="src\IndexBuffer.cpp" />
+    <ClCompile Include="src\Bindable.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\dxerr.cpp" />
     <ClCompile Include="src\DxgiInfoManager.cpp" />
@@ -91,13 +97,27 @@
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\WindowsMessageMap.cpp" />
     <ClCompile Include="src\WinMain.cpp" />
+    <ClCompile Include="src\Topology.cpp" />
+    <ClCompile Include="src\VertexBuffer.cpp" />
+    <ClCompile Include="src\VertexShader.cpp" />
+    <ClCompile Include="src\TransformCB.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ConstantBuffers.h" />
+    <ClInclude Include="src\Drawable.h" />
+    <ClInclude Include="src\Cube.h" />
+    <ClInclude Include="src\InputLayout.h" />
+    <ClInclude Include="src\PixelShader.h" />
+    <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Bindable.h" />
+    <ClInclude Include="src\BindableBase.h" />
     <ClInclude Include="src\GraphicsMacro.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\dxerr.h" />
     <ClInclude Include="src\DxgiInfoManager.h" />
     <ClInclude Include="src\Graphics.h" />
+    <ClInclude Include="src\Macros\GraphicsMacro.h" />
+    <ClInclude Include="src\Macros\WindowMacro.h" />
     <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\Keyboard.h" />
     <ClInclude Include="src\NeonTimer.h" />
@@ -107,6 +127,10 @@
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\WindowsMessageMap.h" />
     <ClInclude Include="src\WindowMacro.h" />
+    <ClInclude Include="src\Topology.h" />
+    <ClInclude Include="src\VertexBuffer.h" />
+    <ClInclude Include="src\VertexShader.h" />
+    <ClInclude Include="src\TransformCB.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NeonDX.rc" />

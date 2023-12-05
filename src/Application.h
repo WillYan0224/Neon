@@ -8,11 +8,12 @@ public:
 	Application();
 
 	int Run();
-
+	~Application();
 private:
 	void DoFrame();
 
 private:
 	Window wnd;
 	NeonTimer timer;
+	std::vector < std::unique_ptr<class Cube>> cubes;
 };

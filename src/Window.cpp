@@ -2,7 +2,7 @@
 #include "resource.h"
 #include <sstream>
 #include <iomanip>
-#include "WindowMacro.h"
+#include "Macros/WindowMacro.h"
 // Window Class
 Window::WindowClass Window::WindowClass::wndClass;
 

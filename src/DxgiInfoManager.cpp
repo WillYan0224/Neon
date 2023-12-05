@@ -4,8 +4,8 @@
 #include <dxgidebug.h>
 #include <memory>
 #include <vector>
-#include "GraphicsMacro.h"
-#include "WindowMacro.h"
+#include "Macros/GraphicsMacro.h"
+#include "Macros/WindowMacro.h"
 
 #pragma comment(lib, "dxguid.lib")
 

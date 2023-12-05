@@ -5,9 +5,14 @@
 #include <vector>
 #include "d3d11.h"
 #include "wrl.h"
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
+#include <memory>
+#include <random>
 
 class Graphics
 {
+	friend class Bindable;
 public:
 	class Exception : public NeonException
 	{
@@ -53,8 +58,11 @@ public:
 	~Graphics() = default;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue);
-	void DrawTestTriangle(float angle, float mouseX, float mouseY);
+	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
+	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
+	DirectX::XMMATRIX GetProjection() const noexcept;
 private:
+	DirectX::XMMATRIX projection;
 #ifndef NDEBUG
 	DxgiInfoManager infoManager;
 #endif
