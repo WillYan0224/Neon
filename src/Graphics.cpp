@@ -153,7 +153,7 @@ void Graphics::DrawTestTriangle(float angle, float mouseX, float mouseY)
 				(
 				DX::XMMatrixRotationZ(angle) *
 				DX::XMMatrixRotationX(angle) *
-				DX::XMMatrixTranslation(mouseX, mouseY, 4.0f)
+				DX::XMMatrixTranslation(mouseX, 0.0f, 4.0f + mouseY)
 				) *
 				DX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 10.0f)
 			)
