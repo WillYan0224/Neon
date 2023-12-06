@@ -103,6 +103,7 @@
     <ClCompile Include="src\TransformCB.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\DrawableBase.h" />
     <ClInclude Include="src\ConstantBuffers.h" />
     <ClInclude Include="src\Drawable.h" />
     <ClInclude Include="src\Cube.h" />
