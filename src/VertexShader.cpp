@@ -5,10 +5,10 @@ VertexShader::VertexShader(Graphics& gfx, const std::wstring& path)
 {
 	INFOMAN(gfx);
 	
-	GFX_THROW_INFO(D3DReadFileToBlob(path.c_str(), &pBytecodeBlob));
+	GFX_THROW_INFO(D3DReadFileToBlob(path.c_str(), &pByteCodeBlob));
 	GFX_THROW_INFO(GetDevice(gfx)->CreateVertexShader(
-		pBytecodeBlob->GetBufferPointer(),
-		pBytecodeBlob->GetBufferSize(),
+		pByteCodeBlob->GetBufferPointer(),
+		pByteCodeBlob->GetBufferSize(),
 		nullptr,
 		&pVertexShader
 		)
@@ -22,5 +22,5 @@ void VertexShader::Bind(Graphics& gfx) noexcept
 
 ID3DBlob* VertexShader::GetByteCode() const noexcept
 {
-	return pBytecodeBlob.Get();
+	return pByteCodeBlob.Get();
 }

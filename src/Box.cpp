@@ -1,8 +1,10 @@
-#include "Cube.h"
+#include "Box.h"
 #include "BindableBase.h"
 #include "Macros/GraphicsMacro.h"
+#include "Sphere.h"
 
-Cube::Cube(Graphics& gfx,
+
+Box::Box(Graphics& gfx,
 	std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
@@ -20,48 +22,27 @@ Cube::Cube(Graphics& gfx,
 	theta(adist(rng)),
 	phi(adist(rng))
 {
-	if(!IsStaticInitialized())
-	{
+	namespace DX = DirectX;
 
+	if (!IsStaticInitialized())
+	{
 		struct Vertex
 		{
-			struct
-			{
-				float x;
-				float y;
-				float z;
-			} pos;
+			DX::XMFLOAT3 pos;
 		};
-		const std::vector<Vertex> vertices =
-		{
-			{ -1.0f,-1.0f,-1.0f },
-			{ 1.0f,-1.0f,-1.0f },
-			{ -1.0f,1.0f,-1.0f },
-			{ 1.0f,1.0f,-1.0f },
-			{ -1.0f,-1.0f,1.0f },
-			{ 1.0f,-1.0f,1.0f },
-			{ -1.0f,1.0f,1.0f },
-			{ 1.0f,1.0f,1.0f },
-		};
-		AddStaticBind(std::make_unique<VertexBuffer>(gfx, vertices));
-	
+		auto model = Sphere::Make<Vertex>();
+		model.Transform(DX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
+
+		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+
 		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\VertexShader.cso");
 		auto pvsbc = pvs->GetByteCode();
 		AddStaticBind(std::move(pvs));
-	
+
 		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\PixelShader.cso"));
-	
-		const std::vector<unsigned short> indices =
-		{
-			0,2,1, 2,3,1,
-			1,3,5, 3,7,5,
-			2,6,3, 3,6,7,
-			4,5,7, 4,7,6,
-			0,4,2, 2,4,6,
-			0,1,4, 1,5,4
-		};
-		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, indices));
-	
+
+		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
+
 		struct ConstantBuffer2
 		{
 			struct
@@ -84,23 +65,24 @@ Cube::Cube(Graphics& gfx,
 			}
 		};
 		AddStaticBind(std::make_unique<PixelConstantBuffer<ConstantBuffer2>>(gfx, cb2));
-	
+
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
-	
+
 		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	}
 	else
 	{
 		SetIndexFromStatic();
 	}
+
 	AddBind(std::make_unique<TransformCB>(gfx, *this));
 }
 
-void Cube::Update(float dt) noexcept
+void Box::Update(float dt) noexcept
 {
 	roll += droll * dt;
 	pitch += dpitch * dt;
@@ -110,7 +92,7 @@ void Cube::Update(float dt) noexcept
 	chi += dchi * dt;
 }
 
-DirectX::XMMATRIX Cube::GetTransformXM() const noexcept
+DirectX::XMMATRIX Box::GetTransformXM() const noexcept
 {
 	return DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 		DirectX::XMMatrixTranslation(r, 0.0f, 0.0f) *

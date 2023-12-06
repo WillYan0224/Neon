@@ -15,5 +15,5 @@ private:
 private:
 	Window wnd;
 	NeonTimer timer;
-	std::vector < std::unique_ptr<class Cube>> cubes;
+	std::vector < std::unique_ptr<class Box>> boxs;
 };

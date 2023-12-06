@@ -16,9 +16,6 @@
     <Filter Include="Header Files\Bindable">
       <UniqueIdentifier>{bf921455-2f6d-46f6-bab3-9e8414d0965c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Drawable">
-      <UniqueIdentifier>{e8071fa0-a8c8-4e76-9f18-bb1f73fa7bd2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Bindable">
       <UniqueIdentifier>{5a92c389-b968-4972-bab3-606209fb7089}</UniqueIdentifier>
     </Filter>
@@ -30,6 +27,12 @@
     </Filter>
     <Filter Include="Shader">
       <UniqueIdentifier>{a6b4d6de-6830-467f-b4c4-6efc75c95a2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Macro\Drawable">
+      <UniqueIdentifier>{e8071fa0-a8c8-4e76-9f18-bb1f73fa7bd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{0253b73e-c0b3-4d07-a25f-478728e0ffc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,7 +96,7 @@
     <ClCompile Include="src\Drawable.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="src\Cube.cpp">
+    <ClCompile Include="src\Box.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
@@ -171,13 +174,34 @@
       <Filter>Header Files\Macro</Filter>
     </ClInclude>
     <ClInclude Include="src\DrawableBase.h">
-      <Filter>Header Files\Drawable</Filter>
+      <Filter>Header Files\Macro\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="src\Cube.h">
-      <Filter>Header Files\Drawable</Filter>
+    <ClInclude Include="src\Box.h">
+      <Filter>Header Files\Macro\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\Drawable.h">
-      <Filter>Header Files\Drawable</Filter>
+      <Filter>Header Files\Macro\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NeonMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cone.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sphere.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cube.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Plane.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Prism.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IndexedTriangleList.h">
+      <Filter>Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

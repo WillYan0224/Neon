@@ -1,6 +1,6 @@
 #include "Application.h"
 #include <memory>
-#include "Cube.h"
+#include "Box.h"
 
 Application::Application()
 	:
@@ -11,12 +11,13 @@ Application::Application()
 	std::uniform_real_distribution<float> ddist(0.0f, 3.1415f * 2.0f);
 	std::uniform_real_distribution<float> odist(0.0f, 3.1415f * 0.3f);
 	std::uniform_real_distribution<float> rdist(6.0f, 20.0f);
-	for (auto i = 0; i < 80; i++)
+	for (auto i = 0; i < 180; i++)
 	{
-		cubes.push_back(std::make_unique<Cube>(
+		boxs.push_back(std::make_unique<Box>(
 			wnd.Gfx(), rng, adist,
 			ddist, odist, rdist
-			));
+			)
+		);
 	}
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
@@ -37,7 +38,7 @@ void Application::DoFrame()
 {
 	auto dt = timer.Mark();
 	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
-	for (auto& b : cubes)
+	for (auto& b : boxs)
 	{
 		b->Update(dt);
 		b->Draw(wnd.Gfx());
