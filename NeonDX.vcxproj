@@ -112,7 +112,6 @@
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Bindable.h" />
     <ClInclude Include="src\BindableBase.h" />
-    <ClInclude Include="src\GraphicsMacro.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\dxerr.h" />
     <ClInclude Include="src\DxgiInfoManager.h" />
@@ -127,7 +126,6 @@
     <ClInclude Include="src\NeonWin.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\WindowsMessageMap.h" />
-    <ClInclude Include="src\WindowMacro.h" />
     <ClInclude Include="src\Topology.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexShader.h" />

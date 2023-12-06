@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Bindable">
+      <UniqueIdentifier>{bf921455-2f6d-46f6-bab3-9e8414d0965c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Drawable">
+      <UniqueIdentifier>{e8071fa0-a8c8-4e76-9f18-bb1f73fa7bd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Bindable">
+      <UniqueIdentifier>{5a92c389-b968-4972-bab3-606209fb7089}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Drawable">
+      <UniqueIdentifier>{831fea6c-55f0-4f1e-a30c-936391465a0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Macro">
+      <UniqueIdentifier>{5b55a422-7592-4449-ab81-5a16c67fc01c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{a6b4d6de-6830-467f-b4c4-6efc75c95a2f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\WinMain.cpp">
@@ -49,34 +67,34 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Bindable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="src\IndexBuffer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="src\InputLayout.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="src\PixelShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VertexShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\VertexBuffer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="src\Topology.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Cube.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="src\TransformCB.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexShader.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VertexBuffer.cpp">
+      <Filter>Source Files\Bindable</Filter>
     </ClCompile>
     <ClCompile Include="src\Drawable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cube.cpp">
+      <Filter>Source Files\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,53 +134,50 @@
     <ClInclude Include="src\DxgiInfoManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GraphicsMacro.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\WindowMacro.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Bindable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="src\BindableBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\IndexBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\InputLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PixelShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VertexShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\VertexBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Topology.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Macros\WindowMacro.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Macros\GraphicsMacro.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Cube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TransformCB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Drawable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Bindable</Filter>
     </ClInclude>
     <ClInclude Include="src\ConstantBuffers.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Topology.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TransformCB.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexBuffer.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexShader.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PixelShader.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputLayout.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IndexBuffer.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Macros\GraphicsMacro.h">
+      <Filter>Header Files\Macro</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Macros\WindowMacro.h">
+      <Filter>Header Files\Macro</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DrawableBase.h">
+      <Filter>Header Files\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cube.h">
+      <Filter>Header Files\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Drawable.h">
+      <Filter>Header Files\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,7 +202,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\VertexShader.hlsl" />
-    <FxCompile Include="src\PixelShader.hlsl" />
+    <FxCompile Include="src\VertexShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="src\PixelShader.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
