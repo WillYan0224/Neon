@@ -10,6 +10,5 @@ public:
 protected:
 	Microsoft::WRL::ComPtr<ID3DBlob> pByteCodeBlob;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-
 };
 

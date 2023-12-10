@@ -28,11 +28,11 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{a6b4d6de-6830-467f-b4c4-6efc75c95a2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Macro\Drawable">
-      <UniqueIdentifier>{e8071fa0-a8c8-4e76-9f18-bb1f73fa7bd2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Geometry">
       <UniqueIdentifier>{0253b73e-c0b3-4d07-a25f-478728e0ffc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawable">
+      <UniqueIdentifier>{e8071fa0-a8c8-4e76-9f18-bb1f73fa7bd2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +97,12 @@
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="src\Box.cpp">
+      <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Pyramid.cpp">
+      <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FlatSphere.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
   </ItemGroup>
@@ -174,13 +180,10 @@
       <Filter>Header Files\Macro</Filter>
     </ClInclude>
     <ClInclude Include="src\DrawableBase.h">
-      <Filter>Header Files\Macro\Drawable</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Box.h">
-      <Filter>Header Files\Macro\Drawable</Filter>
+      <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\Drawable.h">
-      <Filter>Header Files\Macro\Drawable</Filter>
+      <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\NeonMath.h">
       <Filter>Header Files</Filter>
@@ -202,6 +205,15 @@
     </ClInclude>
     <ClInclude Include="src\IndexedTriangleList.h">
       <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Box.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Pyramid.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FlatSphere.h">
+      <Filter>Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -226,10 +238,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="src\VertexShader.hlsl">
+    <FxCompile Include="src\ColorBlendPS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
-    <FxCompile Include="src\PixelShader.hlsl">
+    <FxCompile Include="src\ColorBlendVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="src\ColorIndexPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="src\ColorIndexVS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

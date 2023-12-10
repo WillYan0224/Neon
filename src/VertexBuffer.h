@@ -14,7 +14,6 @@ public:
 		INFOMAN(gfx);
 
 		D3D11_BUFFER_DESC bd = {};
-		ZeroMemory(&bd, sizeof(bd));
 		bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		bd.Usage = D3D11_USAGE_DEFAULT;
 		bd.CPUAccessFlags = 0u;
@@ -23,7 +22,6 @@ public:
 		bd.StructureByteStride = sizeof(T);
 
 		D3D11_SUBRESOURCE_DATA sd = {};
-		ZeroMemory(&sd, sizeof(sd));
 		sd.pSysMem = vertices.data();
 		GFX_THROW_INFO(GetDevice(gfx)->CreateBuffer(&bd, &sd, &pVertexBuffer));
 	}

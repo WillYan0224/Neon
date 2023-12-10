@@ -25,12 +25,12 @@ const char* NeonException::GetType() const noexcept
 
 int NeonException::GetLine() const noexcept
 {
-    return this->line;
+    return line;
 }
 
 const std::string& NeonException::GetFile() const noexcept
 {
-    return this->file;
+    return file;
 }
 
 std::string NeonException::GetOriginString() const noexcept
