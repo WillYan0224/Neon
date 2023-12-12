@@ -80,6 +80,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\SkinnedBox.cpp" />
     <ClCompile Include="src\Sampler.cpp" />
     <ClCompile Include="src\Sheet.cpp" />
     <ClCompile Include="src\GDIPlusManager.cpp" />
@@ -110,6 +111,7 @@
     <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\SkinnedBox.h" />
     <ClInclude Include="src\Sampler.h" />
     <ClInclude Include="src\Sheet.h" />
     <ClInclude Include="src\GDIPlusManager.h" />
