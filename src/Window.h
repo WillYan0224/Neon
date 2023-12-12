@@ -1,7 +1,7 @@
 #pragma once 
 
 #include "NeonWin.h"
-#include "NeonExcpetion.h"
+#include "NeonException.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"

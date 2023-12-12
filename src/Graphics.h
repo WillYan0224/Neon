@@ -1,6 +1,6 @@
 #pragma once
 #include "NeonWin.h"
-#include "NeonExcpetion.h"
+#include "NeonException.h"
 #include "DxgiInfoManager.h"
 #include <vector>
 #include "d3d11.h"

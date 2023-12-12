@@ -1,4 +1,4 @@
-#include "NeonExcpetion.h"
+#include "NeonException.h"
 #include <sstream>
 
 NeonException::NeonException( int line, const char* file ) noexcept

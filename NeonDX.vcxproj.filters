@@ -42,7 +42,7 @@
     <ClCompile Include="src\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\NeonExcpetion.cpp">
+    <ClCompile Include="src\NeonException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\WindowsMessageMap.cpp">
@@ -105,6 +105,12 @@
     <ClCompile Include="src\FlatSphere.cpp">
       <Filter>Source Files\Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="src\GDIPlusManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Surface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\NeonWin.h">
@@ -113,7 +119,7 @@
     <ClInclude Include="src\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\NeonExcpetion.h">
+    <ClInclude Include="src\NeonException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\WindowsMessageMap.h">
@@ -214,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="src\FlatSphere.h">
       <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GDIPlusManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Surface.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
