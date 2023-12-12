@@ -134,7 +134,7 @@ LRESULT WINAPI Window::HandleMsgThunk( HWND hWnd, UINT msg, WPARAM wParam, LPARA
 }
 
 LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
-{
+ {
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -151,7 +151,6 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 			PostQuitMessage(0);
 			break;
 		}
-		break;
 	case WM_SYSKEYDOWN:
 		if (!(lParam & 0x40000000) || kbd.AutorepeatEnabled())
 		{

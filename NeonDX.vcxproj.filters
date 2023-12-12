@@ -28,11 +28,11 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{a6b4d6de-6830-467f-b4c4-6efc75c95a2f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Geometry">
-      <UniqueIdentifier>{0253b73e-c0b3-4d07-a25f-478728e0ffc6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Drawable">
+    <Filter Include="Header Files\Drawable">
       <UniqueIdentifier>{e8071fa0-a8c8-4e76-9f18-bb1f73fa7bd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Geometry">
+      <UniqueIdentifier>{0253b73e-c0b3-4d07-a25f-478728e0ffc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -111,6 +111,15 @@
     <ClCompile Include="src\Surface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Sheet.cpp">
+      <Filter>Source Files\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sampler.cpp">
+      <Filter>Source Files\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\NeonWin.h">
@@ -186,46 +195,55 @@
       <Filter>Header Files\Macro</Filter>
     </ClInclude>
     <ClInclude Include="src\DrawableBase.h">
-      <Filter>Drawable</Filter>
+      <Filter>Header Files\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\Drawable.h">
-      <Filter>Drawable</Filter>
+      <Filter>Header Files\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\NeonMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Cone.h">
-      <Filter>Geometry</Filter>
+      <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="src\Sphere.h">
-      <Filter>Geometry</Filter>
+      <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="src\Cube.h">
-      <Filter>Geometry</Filter>
+      <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="src\Plane.h">
-      <Filter>Geometry</Filter>
+      <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="src\Prism.h">
-      <Filter>Geometry</Filter>
+      <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="src\IndexedTriangleList.h">
-      <Filter>Geometry</Filter>
+      <Filter>Header Files\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="src\Box.h">
-      <Filter>Drawable</Filter>
+      <Filter>Header Files\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\Pyramid.h">
-      <Filter>Drawable</Filter>
+      <Filter>Header Files\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\FlatSphere.h">
-      <Filter>Drawable</Filter>
+      <Filter>Header Files\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="src\GDIPlusManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Surface.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sampler.h">
+      <Filter>Header Files\Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sheet.h">
+      <Filter>Header Files\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +278,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="src\ColorIndexVS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="src\TexturePS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="src\TextureVS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

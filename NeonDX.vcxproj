@@ -80,6 +80,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Sampler.cpp" />
+    <ClCompile Include="src\Sheet.cpp" />
     <ClCompile Include="src\GDIPlusManager.cpp" />
     <ClCompile Include="src\Drawable.cpp" />
     <ClCompile Include="src\Box.cpp" />
@@ -105,8 +107,11 @@
     <ClCompile Include="src\VertexShader.cpp" />
     <ClCompile Include="src\TransformCB.cpp" />
     <ClCompile Include="src\Surface.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Sampler.h" />
+    <ClInclude Include="src\Sheet.h" />
     <ClInclude Include="src\GDIPlusManager.h" />
     <ClInclude Include="src\Cone.h" />
     <ClInclude Include="src\Cube.h" />
@@ -145,6 +150,7 @@
     <ClInclude Include="src\VertexShader.h" />
     <ClInclude Include="src\TransformCB.h" />
     <ClInclude Include="src\Surface.h" />
+    <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NeonDX.rc" />
@@ -183,6 +189,22 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\src\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <FxCompile Include="src\ColorIndexVS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\src\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\src\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="src\TexturePS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\src\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\src\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="src\TextureVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
