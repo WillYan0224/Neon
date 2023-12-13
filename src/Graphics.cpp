@@ -5,6 +5,7 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include "Macros/GraphicsMacro.h"
+#include "imgui/imgui_impl_dx11.h"
 
 using namespace Microsoft::WRL;
 namespace DX = DirectX;
@@ -103,6 +104,8 @@ Graphics::Graphics( HWND hWnd)
 	vp.TopLeftX = 0.0f;
 	vp.TopLeftY = 0.0f;
 	pDeviceContext->RSSetViewports(1u, &vp);
+
+	ImGui_ImplDX11_Init(pDevice.Get(), pDeviceContext.Get());
 }
 
 void Graphics::ClearBuffer(float red, float green, float blue)

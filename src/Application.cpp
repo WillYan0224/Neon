@@ -9,6 +9,10 @@
 #include "NeonMath.h"
 #include "Surface.h"
 #include "GDIPlusManager.h"
+#include "Imgui/imgui.h"
+#include "Imgui/imgui_impl_win32.h"
+#include "Imgui/imgui_impl_dx11.h"
+
 
 GDIPlusManager gdipm;
 
@@ -86,6 +90,20 @@ for( auto& d : drawables )
 		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.0f : dt );
 		d->Draw( wnd.Gfx() );
 	}
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	
+	static bool show_demo_window = true;
+	if (show_demo_window)
+	{
+		ImGui::ShowDemoWindow(&show_demo_window);
+	}
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	
+
 	wnd.Gfx().EndFrame();
 }
 

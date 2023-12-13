@@ -43,6 +43,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(SolutionDir)src\Dependency;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <ExternalIncludePath>$(SolutionDir)src\Dependency;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -53,6 +61,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>src;vendor;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -71,6 +80,7 @@
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <FloatingPointModel>Fast</FloatingPointModel>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>src;vendor;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -80,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ImguiManager.cpp" />
     <ClCompile Include="src\SkinnedBox.cpp" />
     <ClCompile Include="src\Sampler.cpp" />
     <ClCompile Include="src\Sheet.cpp" />
@@ -109,8 +120,16 @@
     <ClCompile Include="src\TransformCB.cpp" />
     <ClCompile Include="src\Surface.cpp" />
     <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="vendor\Imgui\imgui.cpp" />
+    <ClCompile Include="vendor\Imgui\imgui_demo.cpp" />
+    <ClCompile Include="vendor\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\Imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="vendor\Imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="vendor\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="vendor\Imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ImguiManager.h" />
     <ClInclude Include="src\SkinnedBox.h" />
     <ClInclude Include="src\Sampler.h" />
     <ClInclude Include="src\Sheet.h" />
@@ -153,6 +172,14 @@
     <ClInclude Include="src\TransformCB.h" />
     <ClInclude Include="src\Surface.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="vendor\Imgui\imconfig.h" />
+    <ClInclude Include="vendor\Imgui\imgui.h" />
+    <ClInclude Include="vendor\Imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="vendor\Imgui\imgui_impl_win32.h" />
+    <ClInclude Include="vendor\Imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\Imgui\imstb_rectpack.h" />
+    <ClInclude Include="vendor\Imgui\imstb_textedit.h" />
+    <ClInclude Include="vendor\Imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NeonDX.rc" />
