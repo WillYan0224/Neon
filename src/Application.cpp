@@ -79,30 +79,30 @@ Application::Application()
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
 	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	 
+	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
 }
 
 void Application::DoFrame()
 {
-	const auto dt = timer.Mark();
-	wnd.Gfx().ClearBuffer(0.07f, 0.0f, 0.12f);
-for( auto& d : drawables )
-	{
-		d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.0f : dt );
-		d->Draw( wnd.Gfx() );
-	}
-
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
+	const auto dt = timer.Mark() * speed_factor;
+	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
+	for( auto& d : drawables )
+		{
+			d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.0f : dt );
+			d->Draw( wnd.Gfx() );
+		}
 	
-	static bool show_demo_window = true;
-	if (show_demo_window)
-	{
-		ImGui::ShowDemoWindow(&show_demo_window);
-	}
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	static char buffer[1024];
 	
+	// imgui window to control simulation speed
+	if (ImGui::Begin("Simulation Speed"))
+	{
+		ImGui::SliderFloat("Speed Factor", &speed_factor, 0.0f, 4.0f);
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::InputText("Butts", buffer, sizeof(buffer));
+	}
 
 	wnd.Gfx().EndFrame();
 }

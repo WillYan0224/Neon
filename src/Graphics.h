@@ -56,11 +56,17 @@ public:
 	Graphics(const Graphics&) = delete; // no copy constructor
 	Graphics& operator=(const Graphics&) = delete; // no copy constructor
 	~Graphics() = default;
+	void BeginFrame(float r, float g, float b) noexcept;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue);
 	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
+	void EnableImgui() noexcept;
+	void DisableImgui() noexcept;
+	bool IsImguiEnabled() const noexcept;
+private:
+	bool imguiEnabled = true;
 private:
 	DirectX::XMMATRIX projection;
 #ifndef NDEBUG
