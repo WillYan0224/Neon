@@ -85,7 +85,7 @@ Application::Application()
 }
 
 void Application::DoFrame()
-{
+{	
 	const auto dt = timer.Mark() * speed_factor;
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	for( auto& d : drawables )
@@ -93,7 +93,18 @@ void Application::DoFrame()
 			d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.0f : dt );
 			d->Draw( wnd.Gfx() );
 		}
-	
+	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;	
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGuiIO io = ImGui::GetIO();
+	ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+	ImGui::End();
+
 	static char buffer[1024];
 	
 	// imgui window to control simulation speed
