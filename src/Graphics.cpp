@@ -132,6 +132,17 @@ DirectX::XMMATRIX Graphics::GetProjection() const noexcept
 	return projection;
 }
 
+void Graphics::SetCamera(DirectX::FXMMATRIX cam) noexcept
+{
+	camera = cam;
+}
+
+DirectX::XMMATRIX Graphics::GetCamera() const noexcept
+{
+	return camera;
+}
+
+
 void Graphics::EnableImgui() noexcept
 {
 	imguiEnabled = true;
@@ -164,6 +175,8 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept
 
 void Graphics::EndFrame()
 {
+	ImGui::Begin("Viewport");
+	ImGui::End();
 	// imgui frame end
 	if (imguiEnabled)
 	{
@@ -175,6 +188,7 @@ void Graphics::EndFrame()
 #ifndef NDEBUG
 	infoManager.Set();
 #endif
+
 	if (FAILED(hr = pSwapChain->Present(1u, 0u)))
 	{
 		if (hr == DXGI_ERROR_DEVICE_REMOVED)

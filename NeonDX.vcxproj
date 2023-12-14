@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\ImguiManager.cpp" />
     <ClCompile Include="src\SkinnedBox.cpp" />
     <ClCompile Include="src\Sampler.cpp" />
@@ -129,6 +130,7 @@
     <ClCompile Include="vendor\Imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\ImguiManager.h" />
     <ClInclude Include="src\SkinnedBox.h" />
     <ClInclude Include="src\Sampler.h" />
