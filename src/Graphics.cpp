@@ -27,7 +27,7 @@ Graphics::Graphics( HWND hWnd)
 	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapDesc.SampleDesc.Count = 1;
 	swapDesc.SampleDesc.Quality = 0;
-	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
 	swapDesc.BufferCount = 1;
 	swapDesc.OutputWindow = hWnd;
 	swapDesc.Windowed = true;
@@ -59,6 +59,16 @@ Graphics::Graphics( HWND hWnd)
 	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
 	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pMainRtv));
+
+	//
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = swapDesc.BufferDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0u;
+	srvDesc.Texture2D.MipLevels = 1u;
+	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
+	//
+
 
 	// Create depth stencil state
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
@@ -171,12 +181,15 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept
 	const float color[] = { red,green,blue,1.0f };
 	pDeviceContext->ClearRenderTargetView(pMainRtv.Get(), color);
 	pDeviceContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+
 }
 
 void Graphics::EndFrame()
 {
-	ImGui::Begin("Viewport");
-	ImGui::End();
+	
+		ImGui::Begin("Viewport");
+		ImGui::Image((void*)pSRV.Get(), ImVec2(128, 128));
+		ImGui::End();
 	// imgui frame end
 	if (imguiEnabled)
 	{
