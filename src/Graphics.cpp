@@ -80,7 +80,7 @@ Graphics::Graphics( HWND hWnd)
 	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, &pDSState));
 	// bind depth stencil state 
 	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
-
+	
 	// create depth stencil texture2D
 	ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC depthDesc = {};
@@ -106,7 +106,7 @@ Graphics::Graphics( HWND hWnd)
 
 	// bind render targets and depth stencil 
 	pDeviceContext->OMSetRenderTargets(1u, pMainRtv.GetAddressOf(), pDSV.Get());
-
+	
 	// configure viewport
 	D3D11_VIEWPORT vp;
 	vp.Width = 960.0f;
