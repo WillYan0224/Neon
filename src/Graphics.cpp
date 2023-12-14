@@ -27,7 +27,7 @@ Graphics::Graphics( HWND hWnd)
 	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapDesc.SampleDesc.Count = 1;
 	swapDesc.SampleDesc.Quality = 0;
-	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
+	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapDesc.BufferCount = 1;
 	swapDesc.OutputWindow = hWnd;
 	swapDesc.Windowed = true;
@@ -61,12 +61,12 @@ Graphics::Graphics( HWND hWnd)
 	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pMainRtv));
 
 	//
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Format = swapDesc.BufferDesc.Format;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MostDetailedMip = 0u;
-	srvDesc.Texture2D.MipLevels = 1u;
-	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
+	//	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	//	srvDesc.Format = swapDesc.BufferDesc.Format;
+	//	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	//	srvDesc.Texture2D.MostDetailedMip = 0u;
+	//	srvDesc.Texture2D.MipLevels = 1u;
+	//	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
 	//
 
 
@@ -188,13 +188,15 @@ void Graphics::EndFrame()
 {
 	
 		ImGui::Begin("Viewport");
-		ImGui::Image((void*)pSRV.Get(), ImVec2(128, 128));
+	//	ImGui::Image((void*)pSRV.Get(), ImVec2(256, 256));
 		ImGui::End();
 	// imgui frame end
 	if (imguiEnabled)
 	{
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
 	}
 
 	HRESULT hr;

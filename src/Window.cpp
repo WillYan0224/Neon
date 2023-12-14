@@ -68,6 +68,11 @@ Window::Window( int width, int height, const char* name )
 	{
 		throw NEONWND_LAST_EXCEPT();
 	}
+
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 	ShowWindow( hWnd, SW_SHOWDEFAULT );
 	ImGui_ImplWin32_Init(hWnd);
 	// create graphics object
@@ -181,7 +186,7 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		{
 			mouse.OnMouseMove(pt.x, pt.y);
 			if (!mouse.IsInWindow())
-			{	
+			{
 				SetCapture(hWnd);
 				mouse.OnMouseEnter();
 			}
@@ -265,9 +270,16 @@ LRESULT Window::HandleMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noe
 		mouse.OnWheelData(pt.x, pt.y, delta);
 		break;
 	}
-
+	case WM_DPICHANGED:
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_DpiEnableScaleViewports)
+		{
+			//const int dpi = HIWORD(wParam);
+			//printf("WM_DPICHANGED to %d (%.0f%%)\n", dpi, (float)dpi / 96.0f * 100.0f);
+			const RECT* suggested_rect = (RECT*)lParam;
+			::SetWindowPos(hWnd, nullptr, suggested_rect->left, suggested_rect->top, suggested_rect->right - suggested_rect->left, suggested_rect->bottom - suggested_rect->top, SWP_NOZORDER | SWP_NOACTIVATE);
+		}
+		break;
 	}
-
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 // Window Exception
