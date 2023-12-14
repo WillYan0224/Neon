@@ -18,7 +18,8 @@ GDIPlusManager gdipm;
 
 Application::Application()
 	:
-	wnd(960, 540, "DX11 Showcase")
+	wnd(1280, 760, "DX11 Showcase"),
+	light(wnd.Gfx())
 {
 	class Factory
 	{
@@ -29,37 +30,10 @@ Application::Application()
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
-			switch (typedist(rng))
-			{
-			case 0:
-				return std::make_unique<Pyramid>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-				);
-			case 1:
-				return std::make_unique<Box>(
-					gfx, rng, adist, ddist,
-					odist, rdist, bdist
-				);
-			case 2:
-				return std::make_unique<FlatSphere>(
-					gfx, rng, adist, ddist,
-					odist, rdist, longdist, latdist
-				);
-			case 3:
-				return std::make_unique<Sheet>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-				);
-			case 4:
-				return std::make_unique<SkinnedBox>(
-					gfx, rng, adist, ddist,
-					odist, rdist
-				);
-			default:
-				assert(false && "bad drawable type in factory");
-				return {};
-			}
+			return std::make_unique<Box>(
+				gfx, rng, adist, ddist,
+				odist, rdist, bdist
+			);
 		}
 	private:
 		Graphics& gfx;
@@ -69,18 +43,16 @@ Application::Application()
 		std::uniform_real_distribution<float> odist{ 0.0f,NEON::PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
-		std::uniform_int_distribution<int> latdist{ 5,20 };
-		std::uniform_int_distribution<int> longdist{ 10,40 };
-		std::uniform_int_distribution<int> typedist{ 0,4 };
+
 	};
 
 	Factory f(wnd.Gfx());
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
 	wnd.Gfx().SetCamera(DirectX::XMMatrixTranslation(0.0f, 0.0f, 20.0f));
-
+	light.Bind(wnd.Gfx());
 }
 
 void Application::DoFrame()
@@ -93,6 +65,8 @@ void Application::DoFrame()
 			d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.0f : dt );
 			d->Draw( wnd.Gfx() );
 		}
+	light.Draw(wnd.Gfx());
+
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;	
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -106,6 +80,8 @@ void Application::DoFrame()
 	ImGui::End();
 	// imgui window to control camera
 	cam.SpawnControlWindow();
+	light.SpawnControlWindow();
+
 	static char buffer[1024];
 	
 	// imgui window to control simulation speed

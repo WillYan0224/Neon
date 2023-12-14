@@ -72,7 +72,7 @@ Window::Window( int width, int height, const char* name )
 	ImGuiIO& io = ImGui::GetIO();
 	(void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+//	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
 	ShowWindow( hWnd, SW_SHOWDEFAULT );
 	ImGui_ImplWin32_Init(hWnd);
 	// create graphics object

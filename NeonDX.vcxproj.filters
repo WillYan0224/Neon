@@ -150,6 +150,12 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SolidSphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\NeonWin.h">
@@ -308,6 +314,12 @@
     <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SolidSphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="NeonDX.rc">
@@ -349,5 +361,9 @@
     <FxCompile Include="src\TextureVS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="src\PhongPS.hlsl" />
+    <FxCompile Include="src\PhongVS.hlsl" />
+    <FxCompile Include="src\SolidVS.hlsl" />
+    <FxCompile Include="src\SolidPS.hlsl" />
   </ItemGroup>
 </Project>

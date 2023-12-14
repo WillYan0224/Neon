@@ -27,7 +27,7 @@ Graphics::Graphics( HWND hWnd)
 	swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	swapDesc.SampleDesc.Count = 1;
 	swapDesc.SampleDesc.Quality = 0;
-	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT | DXGI_USAGE_SHADER_INPUT;
 	swapDesc.BufferCount = 1;
 	swapDesc.OutputWindow = hWnd;
 	swapDesc.Windowed = true;
@@ -59,15 +59,15 @@ Graphics::Graphics( HWND hWnd)
 	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
 	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
 	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pMainRtv));
-
-	//
-	//	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	//	srvDesc.Format = swapDesc.BufferDesc.Format;
-	//	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	//	srvDesc.Texture2D.MostDetailedMip = 0u;
-	//	srvDesc.Texture2D.MipLevels = 1u;
-	//	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
-	//
+	pBackBuffer->Release();
+	
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = swapDesc.BufferDesc.Format;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0u;
+	srvDesc.Texture2D.MipLevels = 1u;
+	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
+	
 
 
 	// Create depth stencil state
@@ -85,8 +85,8 @@ Graphics::Graphics( HWND hWnd)
 	ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC depthDesc = {};
 	ZeroMemory(&depthDesc, sizeof(depthDesc));
-	depthDesc.Width = 960u;
-	depthDesc.Height = 540u;
+	depthDesc.Width = 1280u;
+	depthDesc.Height = 760u;
 	depthDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
 	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -109,8 +109,8 @@ Graphics::Graphics( HWND hWnd)
 	
 	// configure viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = 960.0f;
-	vp.Height = 540.0f;
+	vp.Width = 1280.0f;
+	vp.Height = 760.0f;
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
@@ -186,9 +186,8 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept
 
 void Graphics::EndFrame()
 {
-	
 		ImGui::Begin("Viewport");
-	//	ImGui::Image((void*)pSRV.Get(), ImVec2(256, 256));
+		ImGui::Image((void*)pSRV.Get(), ImVec2(256, 256));
 		ImGui::End();
 	// imgui frame end
 	if (imguiEnabled)
