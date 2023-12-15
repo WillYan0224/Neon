@@ -46,13 +46,10 @@ Application::Application()
 
 	};
 
-	Factory f(wnd.Gfx());
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
-	wnd.Gfx().SetCamera(DirectX::XMMatrixTranslation(0.0f, 0.0f, 20.0f));
-	light.Bind(wnd.Gfx());
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
 
 void Application::DoFrame()
@@ -60,6 +57,7 @@ void Application::DoFrame()
 	const auto dt = timer.Mark() * speed_factor;
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
 	wnd.Gfx().SetCamera(cam.GetMatrix());
+	light.Bind(wnd.Gfx());
 	for( auto& d : drawables )
 		{
 			d->Update( wnd.kbd.KeyIsPressed( VK_SPACE ) ? 0.0f : dt );
