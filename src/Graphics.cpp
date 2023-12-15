@@ -70,8 +70,6 @@ Graphics::Graphics( HWND hWnd)
 	
 
 	D3D11_RASTERIZER_DESC rasDesc = {};
-	rasDesc.CullMode = D3D11_CULL_BACK;
-	rasDesc.FillMode = D3D11_FILL_WIREFRAME;
 	pDevice->CreateRasterizerState(&rasDesc, &pRasterizerState);
 	pDeviceContext->RSSetState(pRasterizerState.Get());
 
