@@ -80,4 +80,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pMainRtv = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pSRV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizerState = nullptr;
 };

@@ -41,7 +41,7 @@ Application::Application()
 		std::uniform_real_distribution<float> adist{ 0.0f,NEON::PI * 2.0f };
 		std::uniform_real_distribution<float> ddist{ 0.0f,NEON::PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.0f,NEON::PI * 0.08f };
-		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
+		std::uniform_real_distribution<float> rdist{ 6.0f,25.0f };
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
 
 	};
@@ -49,7 +49,7 @@ Application::Application()
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
 }
 
 void Application::DoFrame()

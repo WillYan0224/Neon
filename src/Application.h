@@ -23,6 +23,6 @@ private:
 	Camera cam;
 	PointLight light;
 	std::vector<std::unique_ptr<class Drawable>> drawables;
-	static constexpr size_t nDrawables = 180;
+	static constexpr size_t nDrawables = 240;
 	float speed_factor = 1.0f;
 };

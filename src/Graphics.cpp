@@ -69,6 +69,11 @@ Graphics::Graphics( HWND hWnd)
 	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
 	
 
+	D3D11_RASTERIZER_DESC rasDesc = {};
+	rasDesc.FillMode = D3D11_FILL_WIREFRAME;
+	rasDesc.CullMode = D3D11_CULL_BACK;
+	pDevice->CreateRasterizerState(&rasDesc, &pRasterizerState);
+	pDeviceContext->RSSetState(pRasterizerState.Get());
 
 	// Create depth stencil state
 	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
@@ -187,7 +192,7 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept
 void Graphics::EndFrame()
 {
 		ImGui::Begin("Viewport");
-		ImGui::Image((void*)pSRV.Get(), ImVec2(256, 256));
+		ImGui::Image((void*)pSRV.Get(), ImVec2(256,256));
 		ImGui::End();
 	// imgui frame end
 	if (imguiEnabled)
