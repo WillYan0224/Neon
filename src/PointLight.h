@@ -16,12 +16,12 @@ private:
 	{
 		DirectX::XMFLOAT3 pos;
 		float diffuseIntensity;
-		DirectX::XMFLOAT3 materialColor;
-		float attLin;
 		DirectX::XMFLOAT3 diffuseColor;
-		float attConst;
+		float attLin;
 		DirectX::XMFLOAT3 ambient;
+		float attConst;
 		float attQuad;
+		float padding[3];
 	};
 private:
 	PointLightCBuf cbData;

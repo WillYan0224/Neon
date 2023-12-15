@@ -2,14 +2,17 @@ cbuffer LightCBuf : register(b0)
 {
     float3 lightPos;
     float diffuseIntensity;
-    float3 materialColor;
-    float attLin;
     float3 diffuseColor;
-    float attConst;
+    float attLin;
     float3 ambient;
+    float attConst;
     float attQuad;
 };
 
+cbuffer ObjectCBuf
+{
+    float3 materialColor;
+};
 
 float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
 {
