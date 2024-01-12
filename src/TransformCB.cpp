@@ -12,14 +12,13 @@ TransformCB::TransformCB(Graphics& gfx, const Drawable& parent, UINT slot)
 
 void TransformCB::Bind(Graphics& gfx) noexcept
 {
+	const auto modelView = parent.GetTransformXM() * gfx.GetCamera(); 
 	const auto model = parent.GetTransformXM();
 	const Transforms tf =
 	{
-		DirectX::XMMatrixTranspose(model),
+		DirectX::XMMatrixTranspose(modelView),
 		DirectX::XMMatrixTranspose(
-			model *
-			gfx.GetCamera() *
-			gfx.GetProjection()
+			modelView *	gfx.GetProjection()
 		)
 	};
 	pVcbuf->Update(gfx, tf);
