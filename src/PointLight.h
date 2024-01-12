@@ -14,14 +14,13 @@ public:
 private:
 	struct PointLightCBuf
 	{
-		DirectX::XMFLOAT3 pos;
+		alignas(16) DirectX::XMFLOAT3 pos;
+		alignas(16) DirectX::XMFLOAT3 ambient;
+		alignas(16) DirectX::XMFLOAT3 diffuseColor;
 		float diffuseIntensity;
-		DirectX::XMFLOAT3 diffuseColor;
-		float attLin;
-		DirectX::XMFLOAT3 ambient;
 		float attConst;
-		float attQuad;
-		float padding[3];
+		float attLin;
+		float attQuad;;
 	};
 private:
 	PointLightCBuf cbData;

@@ -1,11 +1,11 @@
 cbuffer LightCBuf : register(b0)
 {
     float3 lightPos;
-    float diffuseIntensity;
-    float3 diffuseColor;
-    float attLin;
     float3 ambient;
+    float3 diffuseColor;
+    float diffuseIntensity;
     float attConst;
+    float attLin;
     float attQuad;
 };
 
