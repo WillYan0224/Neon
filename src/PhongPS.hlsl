@@ -16,10 +16,10 @@ cbuffer ObjectCBuf
     float  specularPower;
 };
 
-float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
+float4 main(float3 cameraPos : Position, float3 n : Normal) : SV_Target
 {
 	// fragment to light vector data
-    const float3 vToL = lightPos - worldPos;
+    const float3 vToL = lightPos - cameraPos;
     const float distToL = length(vToL);
     const float3 dirToL = vToL / distToL;
 	// diffuse attenuation
@@ -29,7 +29,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
     // reflect along normal
     const float3 r = reflect(vToL, n);
     // specular based on view vector and reflected vector
-    const float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(worldPos), normalize(-r))), specularPower);
+    const float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(cameraPos), normalize(-r))), specularPower);
 	// final color
     return float4(saturate((diffuse + ambient + specular) * materialColor), 1.0f);
 }
