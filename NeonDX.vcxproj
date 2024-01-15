@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Cylinder.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SolidSphere.cpp" />
     <ClCompile Include="src\Camera.cpp" />
@@ -132,6 +133,7 @@
     <ClCompile Include="vendor\Imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Cylinder.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\SolidSphere.h" />
     <ClInclude Include="src\Camera.h" />
@@ -199,6 +201,14 @@
     <None Include="src\DXTrace.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="IndexedPhongPS.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\src\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\src\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
     <FxCompile Include="src\ColorBlendPS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

@@ -29,7 +29,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
     // reflect along normal
     const float3 r = reflect(vToL, n);
     // specular based on view vector and reflected vector
-    const float3 specular = (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(worldPos), normalize(-r))), specularPower);
+    const float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(worldPos), normalize(-r))), specularPower);
 	// final color
     return float4(saturate((diffuse + ambient + specular) * materialColor), 1.0f);
 }
