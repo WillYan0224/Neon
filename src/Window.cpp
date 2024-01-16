@@ -52,14 +52,15 @@ Window::Window( int width, int height, const char* name )
 	wr.top = 100;
 	wr.right = width + wr.left;
 	wr.bottom = height + wr.top;
-	if (AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE) == 0)
-	{
-		throw NEONWND_LAST_EXCEPT();
-	}
+	//if (AdjustWindowRect(&wr, WS_OVERLAPPEDWINDOW, FALSE) == 0)
+	//{
+	//	throw NEONWND_LAST_EXCEPT();
+	//}
 	
 	hWnd = CreateWindow(
 		WindowClass::GetName(), name,
-		WS_OVERLAPPEDWINDOW,
+		//WS_OVERLAPPEDWINDOW 
+		WS_VISIBLE | WS_CAPTION | WS_SYSMENU ,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this
 	);
