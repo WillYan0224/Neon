@@ -11,10 +11,16 @@
 #include "NeonMath.h"
 #include "Surface.h"
 #include "GDIPlusManager.h"
+
+#include <assimp\Importer.hpp>
+#include <assimp\scene.h>
+#include <assimp\postprocess.h>
+
 #include "Imgui/imgui.h"
 #include "Imgui/imgui_impl_win32.h"
 #include "Imgui/imgui_impl_dx11.h"
 
+namespace dx = DirectX;
 
 GDIPlusManager gdipm;
 
@@ -23,37 +29,42 @@ Application::Application()
 	wnd(1280, 760, "DX11 Showcase"),
 	light(wnd.Gfx())
 {
+	Assimp::Importer imp;
+	auto model = imp.ReadFile( "models\\suzanne.obj",
+		aiProcess_Triangulate |
+		aiProcess_JoinIdenticalVertices
+	);
+
 	class Factory
 	{
 	public:
-		Factory(Graphics& gfx)
+		Factory( Graphics& gfx )
 			:
-			gfx(gfx)
+			gfx( gfx )
 		{}
 		std::unique_ptr<Drawable> operator()()
 		{
-			const DirectX::XMFLOAT3 mat = { cdist(rng),cdist(rng),cdist(rng) };
+			const DirectX::XMFLOAT3 mat = { cdist( rng ),cdist( rng ),cdist( rng ) };
 
-			switch (sdist(rng))
+			switch( sdist( rng ) )
 			{
 			case 0:
 				return std::make_unique<Box>(
-					gfx, rng, adist, ddist,
-					odist, rdist, bdist, mat
+					gfx,rng,adist,ddist,
+					odist,rdist,bdist,mat
 				);
 			case 1:
 				return std::make_unique<Cylinder>(
-					gfx, rng, adist, ddist, odist,
-					rdist, bdist, tdist
+					gfx,rng,adist,ddist,odist,
+					rdist,bdist,tdist
 				);
 			case 2:
 				return std::make_unique<Pyramid>(
-					gfx, rng, adist, ddist, odist,
-					rdist, tdist
+					gfx,rng,adist,ddist,odist,
+					rdist,tdist
 				);
-			
 			default:
-				assert(false && "impossible drawable option in factory");
+				assert( false && "impossible drawable option in factory" );
 				return {};
 			}
 		}
@@ -70,10 +81,19 @@ Application::Application()
 		std::uniform_int_distribution<int> tdist{ 3,30 };
 	};
 
-	drawables.reserve(nDrawables);
-	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ wnd.Gfx() });
+	drawables.reserve( nDrawables );
+	std::generate_n( std::back_inserter( drawables ),nDrawables,Factory{ wnd.Gfx() } );
 
-	wnd.Gfx().SetProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
+	// init box pointers for editing instance parameters
+	for( auto& pd : drawables )
+	{
+		if( auto pb = dynamic_cast<Box*>(pd.get()) )
+		{
+			boxes.push_back( pb );
+		}
+	}
+
+	wnd.Gfx().SetProjection( dx::XMMatrixPerspectiveLH( 1.0f,3.0f / 4.0f,0.5f,40.0f ) );
 }
 
 void Application::DoFrame()
