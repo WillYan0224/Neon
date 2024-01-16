@@ -19,11 +19,11 @@ SolidSphere::SolidSphere(Graphics& gfx, float radius)
 		AddBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 		AddIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\SolidVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\Shaders\\SolidVS.cso");
 		auto pvsbc = pvs->GetByteCode();
 		AddStaticBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\SolidPS.cso"));
+		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\Shaders\\SolidPS.cso"));
 
 		struct PSColorConstant
 		{

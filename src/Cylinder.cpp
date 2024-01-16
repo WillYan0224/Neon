@@ -25,11 +25,11 @@ Cylinder::Cylinder(Graphics& gfx, std::mt19937& rng,
 
 		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\PhongVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\Shaders\\PhongVS.cso");
 		auto pvsbc = pvs->GetByteCode();
 		AddStaticBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\IndexedPhongPS.cso"));
+		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\Shaders\\IndexedPhongPS.cso"));
 
 		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 

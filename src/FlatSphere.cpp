@@ -28,11 +28,11 @@ FlatSphere::FlatSphere(Graphics& gfx,
 
 	if (!IsStaticInitialized())
 	{
-		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\ColorIndexVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\Shaders\\ColorIndexVS.cso");
 		auto pvsbc = pvs->GetByteCode();
 		AddStaticBind(std::move(pvs));
 
-		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\ColorIndexPS.cso"));
+		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\Shaders\\ColorIndexPS.cso"));
 
 		struct PixelShaderConstants
 		{

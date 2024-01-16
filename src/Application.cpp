@@ -11,7 +11,7 @@
 #include "NeonMath.h"
 #include "Surface.h"
 #include "GDIPlusManager.h"
-
+#include "AssimpTest.h"
 #include <assimp\Importer.hpp>
 #include <assimp\scene.h>
 #include <assimp\postprocess.h>
@@ -29,11 +29,6 @@ Application::Application()
 	wnd(1280, 760, "DX11 Showcase"),
 	light(wnd.Gfx())
 {
-	Assimp::Importer imp;
-	auto model = imp.ReadFile( "models\\suzanne.obj",
-		aiProcess_Triangulate |
-		aiProcess_JoinIdenticalVertices
-	);
 
 	class Factory
 	{
@@ -63,6 +58,11 @@ Application::Application()
 					gfx,rng,adist,ddist,odist,
 					rdist,tdist
 				);
+			case 3:
+				return std::make_unique<AssTest>(
+					gfx, rng, adist, ddist,
+					odist, rdist, mat, 1.5f
+				);
 			default:
 				assert( false && "impossible drawable option in factory" );
 				return {};
@@ -71,7 +71,7 @@ Application::Application()
 	private:
 		Graphics& gfx;
 		std::mt19937 rng{ std::random_device{}() };
-		std::uniform_int_distribution<int> sdist{ 0,2 };
+		std::uniform_int_distribution<int> sdist{ 0,3 };
 		std::uniform_real_distribution<float> adist{ 0.0f,NEON::PI * 2.0f };
 		std::uniform_real_distribution<float> ddist{ 0.0f,NEON::PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.0f,NEON::PI * 0.08f };
@@ -93,7 +93,7 @@ Application::Application()
 		}
 	}
 
-	wnd.Gfx().SetProjection( dx::XMMatrixPerspectiveLH( 1.0f,3.0f / 4.0f,0.5f,40.0f ) );
+	wnd.Gfx().SetProjection( dx::XMMatrixPerspectiveLH( 1.0f, 9.0 / 16.0,0.5f,40.0f ) );
 }
 
 void Application::DoFrame()
