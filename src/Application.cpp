@@ -3,6 +3,7 @@
 #include "Pyramid.h"
 #include "Cylinder.h"
 #include "Box.h"
+#include "SkinnedBox.h"
 #include "Sheet.h"
 #include "SkinnedBox.h"
 #include <memory>
@@ -45,6 +46,12 @@ Application::Application()
 					gfx, rng, adist, ddist, odist,
 					rdist, bdist, tdist
 				);
+			case 2:
+				return std::make_unique<Pyramid>(
+					gfx, rng, adist, ddist, odist,
+					rdist, tdist
+				);
+			
 			default:
 				assert(false && "impossible drawable option in factory");
 				return {};
@@ -53,7 +60,7 @@ Application::Application()
 	private:
 		Graphics& gfx;
 		std::mt19937 rng{ std::random_device{}() };
-		std::uniform_int_distribution<int> sdist{ 0,1 };
+		std::uniform_int_distribution<int> sdist{ 0,2 };
 		std::uniform_real_distribution<float> adist{ 0.0f,NEON::PI * 2.0f };
 		std::uniform_real_distribution<float> ddist{ 0.0f,NEON::PI * 0.5f };
 		std::uniform_real_distribution<float> odist{ 0.0f,NEON::PI * 0.08f };
@@ -84,7 +91,7 @@ void Application::DoFrame()
 
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;	
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(5.0f, 5.0f));
 	ImGuiIO io = ImGui::GetIO();
 	ImGui::Begin("DockSpace Demo", nullptr, window_flags);
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
@@ -96,8 +103,6 @@ void Application::DoFrame()
 	// imgui window to control camera
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
-
-	static char buffer[1024];
 	
 	// imgui window to control simulation speed
 	if (ImGui::Begin("Simulation Speed"))

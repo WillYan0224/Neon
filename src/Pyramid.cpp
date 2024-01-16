@@ -2,92 +2,77 @@
 #include "BindableBase.h"
 #include "Macros//GraphicsMacro.h"
 #include "Cone.h"
+#include <array>
 
 
-Pyramid::Pyramid( Graphics& gfx,
-	std::mt19937& rng,
+Pyramid::Pyramid(Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
 	std::uniform_real_distribution<float>& odist,
-	std::uniform_real_distribution<float>& rdist)
+	std::uniform_real_distribution<float>& rdist,
+	std::uniform_int_distribution<int>& tdist)
 	:
-	r( rdist( rng ) ),
-	droll( ddist( rng ) ),
-	dpitch( ddist( rng ) ),
-	dyaw( ddist( rng ) ),
-	dphi( odist( rng ) ),
-	dtheta( odist( rng ) ),
-	dchi( odist( rng ) ),
-	chi( adist( rng ) ),
-	theta( adist( rng ) ),
-	phi( adist( rng ) )
+	TestObject(gfx, rng, adist, ddist, odist, rdist)
 {
 	namespace dx = DirectX;
 
-	if( !IsStaticInitialized() )
+	if (!IsStaticInitialized())
 	{
 		struct Vertex
 		{
 			dx::XMFLOAT3 pos;
-			struct
-			{
-				unsigned char r;
-				unsigned char g;
-				unsigned char b;
-				unsigned char a;
-			} color;
+			dx::XMFLOAT3 n;
+			std::array<char, 4> color;
+	
 		};
-		auto model = Cone::MakeTesselated<Vertex>( 4 );
-		// set vertex colors for mesh
-		model.vertices[0].color = { 255,0,255 };
-		model.vertices[1].color = { 255,0,255 };
-		model.vertices[2].color = { 200,0,225 };
-		model.vertices[3].color = { 200,0,225 };
-		model.vertices[4].color = { 200,80,200 };
-		model.vertices[5].color = { 0,100,175 };
-		// deform mesh linearly
-		model.Transform( dx::XMMatrixScaling( 1.0f,1.0f,0.7f ) );
+		const auto tesselation = tdist(rng);
+		auto model = Cone::MakeTesselatedIndependentFaces<Vertex>(tesselation);
+		// set vertex colors for mesh (tip red blending to blue base)
+		for (auto& v : model.vertices)
+		{
+			v.color = { (char)10,(char)10,(char)255 };
+		}
+		for (int i = 0; i < tesselation; i++)
+		{
+			model.vertices[i * 3].color = { (char)255,(char)10,(char)10 };
+		}
+		// squash mesh a bit in the z direction
+		model.Transform(dx::XMMatrixScaling(1.0f, 1.0f, 0.7f));
+		// add normals
+		model.SetNormalsIndependentFlat();
 
-		AddStaticBind( std::make_unique<VertexBuffer>( gfx,model.vertices ) );
+		AddStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
-		auto pvs = std::make_unique<VertexShader>( gfx,L"src\\ColorBlendVS.cso" );
+		auto pvs = std::make_unique<VertexShader>(gfx, L"src\\BlendedPhongVS.cso");
 		auto pvsbc = pvs->GetByteCode();
-		AddStaticBind( std::move( pvs ) );
+		AddStaticBind(std::move(pvs));
 
-		AddStaticBind( std::make_unique<PixelShader>( gfx,L"src\\ColorBlendPS.cso" ) );
+		AddStaticBind(std::make_unique<PixelShader>(gfx, L"src\\BlendedPhongPS.cso"));
 
-		AddStaticIndexBuffer( std::make_unique<IndexBuffer>( gfx,model.indices ) );
+		AddStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Color",0,DXGI_FORMAT_R8G8B8A8_UNORM,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "Color",0,DXGI_FORMAT_R8G8B8A8_UNORM,0,24,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
-		AddStaticBind( std::make_unique<InputLayout>( gfx,ied,pvsbc ) );
+		AddStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
 
-		AddStaticBind( std::make_unique<Topology>( gfx,D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST ) );
+		AddStaticBind(std::make_unique<Topology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+
+		struct PSMaterialConstant
+		{
+			float specularIntensity = 0.6f;
+			float specularPower = 30.0f;
+			float padding[2];
+		} colorConst;
+		AddStaticBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, colorConst, 1u));
 	}
 	else
 	{
 		SetIndexFromStatic();
 	}
 
-	AddBind( std::make_unique<TransformCB>( gfx,*this ) );
-}
-
-void Pyramid::Update( float dt ) noexcept
-{
-	roll += droll * dt;
-	pitch += dpitch * dt;
-	yaw += dyaw * dt;
-	theta += dtheta * dt;
-	phi += dphi * dt;
-	chi += dchi * dt;
-}
-
-DirectX::XMMATRIX Pyramid::GetTransformXM() const noexcept
-{
-	return DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
-		DirectX::XMMatrixTranslation(r, 0.0f, 0.0f) *
-		DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi);
+	AddBind(std::make_unique<TransformCB>(gfx, *this));
 }

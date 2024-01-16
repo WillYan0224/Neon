@@ -216,7 +216,7 @@ const char* Surface::Exception::what() const noexcept
 
 const char* Surface::Exception::GetType() const noexcept
 {
-	return "Chili Graphics Exception";
+	return "Neon Graphics Exception";
 }
 
 const std::string& Surface::Exception::GetNote() const noexcept
