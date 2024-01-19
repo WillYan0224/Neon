@@ -5,6 +5,7 @@
 #include "Imgui/imgui.h"
 #include "Camera.h"
 #include "PointLight.h"
+#include "Model.h"
 #include <set>
 
 class Application
@@ -23,11 +24,6 @@ private:
 	NeonTimer timer;
 	Camera cam;
 	PointLight light;
-	std::vector<std::unique_ptr<class Drawable>> drawables;
-	std::vector<class Box*> boxes;
-	std::optional<int> comboBoxIndex;
-	std::set<int> boxControlIds;
-	static constexpr size_t nDrawables = 240;
 	float speed_factor = 1.0f;
-
+	Model nano{ wnd.Gfx(),"src\\Models\\nanosuit.obj" };
 };

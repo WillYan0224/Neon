@@ -141,6 +141,7 @@
     <ClInclude Include="src\AssimpTest.h" />
     <ClInclude Include="src\Cone.h" />
     <ClInclude Include="src\Cylinder.h" />
+    <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\SolidSphere.h" />
     <ClInclude Include="src\Camera.h" />
