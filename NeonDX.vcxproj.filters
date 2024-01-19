@@ -335,7 +335,7 @@
     <ClInclude Include="src\AssimpTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\VertexLayout.h">
+    <ClInclude Include="src\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

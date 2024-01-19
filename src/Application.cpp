@@ -11,7 +11,7 @@
 #include "NeonMath.h"
 #include "Surface.h"
 #include "GDIPlusManager.h"
-#include "VertexLayout.h"
+#include "Vertex.h"
 
 #include "AssimpTest.h"
 #include <assimp\Importer.hpp>

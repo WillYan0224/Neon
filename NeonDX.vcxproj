@@ -179,7 +179,7 @@
     <ClInclude Include="src\NeonException.h" />
     <ClInclude Include="src\NeonWin.h" />
     <ClInclude Include="src\TestObject.h" />
-    <ClInclude Include="src\VertexLayout.h" />
+    <ClInclude Include="src\Vertex.h" />
     <ClInclude Include="src\Window.h" />
     <ClInclude Include="src\WindowsMessageMap.h" />
     <ClInclude Include="src\Topology.h" />
