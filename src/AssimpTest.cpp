@@ -22,8 +22,8 @@ AssTest::AssTest(Graphics& gfx, std::mt19937& rng,
 		using NEON::VertexLayout;
 		NEON::VertexBuffer vbuf(std::move(
 			VertexLayout{}
-			.Append<VertexLayout::Position3D>()
-			.Append<VertexLayout::Normal>()
+			.Append(VertexLayout::Position3D)
+			.Append(VertexLayout::Normal)
 		));
 
 		Assimp::Importer imp;
