@@ -96,6 +96,10 @@ public:
 
 		pRoot = ParseNode(*pScene->mRootNode);
 	}
+	void Draw(Graphics& gfx, DirectX::FXMMATRIX transform) const
+	{
+		pRoot->Draw(gfx, transform);
+	}
 	static std::unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh)
 	{
 		namespace dx = DirectX;
