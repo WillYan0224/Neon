@@ -95,18 +95,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\AssimpTest.cpp" />
-    <ClCompile Include="src\Cylinder.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\SolidSphere.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\ImguiManager.cpp" />
-    <ClCompile Include="src\SkinnedBox.cpp" />
     <ClCompile Include="src\Sampler.cpp" />
-    <ClCompile Include="src\Sheet.cpp" />
     <ClCompile Include="src\GDIPlusManager.cpp" />
     <ClCompile Include="src\Drawable.cpp" />
-    <ClCompile Include="src\Box.cpp" />
-    <ClCompile Include="src\FlatSphere.cpp" />
     <ClCompile Include="src\InputLayout.cpp" />
     <ClCompile Include="src\PixelShader.cpp" />
     <ClCompile Include="src\IndexBuffer.cpp" />
@@ -119,7 +115,7 @@
     <ClCompile Include="src\Keyboard.cpp" />
     <ClCompile Include="src\NeonException.cpp" />
     <ClCompile Include="src\NeonTimer.cpp" />
-    <ClCompile Include="src\Pyramid.cpp" />
+    <ClCompile Include="src\Vertex.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\WindowsMessageMap.cpp" />
     <ClCompile Include="src\WinMain.cpp" />
@@ -139,29 +135,27 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssimpTest.h" />
+    <ClInclude Include="src\BindableCommon.h" />
+    <ClInclude Include="src\Color.h" />
+    <ClInclude Include="src\ConditionalNoexcept.h" />
     <ClInclude Include="src\Cone.h" />
-    <ClInclude Include="src\Cylinder.h" />
+    <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\PointLight.h" />
     <ClInclude Include="src\SolidSphere.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\ImguiManager.h" />
-    <ClInclude Include="src\SkinnedBox.h" />
     <ClInclude Include="src\Sampler.h" />
-    <ClInclude Include="src\Sheet.h" />
     <ClInclude Include="src\GDIPlusManager.h" />
     <ClInclude Include="src\Cube.h" />
-    <ClInclude Include="src\FlatSphere.h" />
     <ClInclude Include="src\IndexedTriangleList.h" />
     <ClInclude Include="src\NeonMath.h" />
     <ClInclude Include="src\Plane.h" />
     <ClInclude Include="src\Prism.h" />
-    <ClInclude Include="src\Pyramid.h" />
     <ClInclude Include="src\Sphere.h" />
     <ClInclude Include="src\DrawableBase.h" />
     <ClInclude Include="src\ConstantBuffers.h" />
     <ClInclude Include="src\Drawable.h" />
-    <ClInclude Include="src\Box.h" />
     <ClInclude Include="src\InputLayout.h" />
     <ClInclude Include="src\PixelShader.h" />
     <ClInclude Include="src\IndexBuffer.h" />

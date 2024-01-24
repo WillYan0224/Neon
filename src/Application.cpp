@@ -1,11 +1,7 @@
 #include "Application.h"
 #include "FlatSphere.h"
-#include "Pyramid.h"
-#include "Cylinder.h"
-#include "Box.h"
-#include "SkinnedBox.h"
-#include "Sheet.h"
-#include "SkinnedBox.h"
+
+
 #include <memory>
 #include <algorithm>
 #include "NeonMath.h"

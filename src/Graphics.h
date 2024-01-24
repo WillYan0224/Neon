@@ -9,10 +9,17 @@
 #include <DirectXMath.h>
 #include <memory>
 #include <random>
+#include "ConditionalNoexcept.h"
+
+namespace Bind
+{
+	class Bindable;
+}
+
 
 class Graphics
 {
-	friend class Bindable;
+	friend class Bind::Bindable;
 public:
 	class Exception : public NeonException
 	{
@@ -59,7 +66,7 @@ public:
 	void BeginFrame(float r, float g, float b) noexcept;
 	void EndFrame();
 	void ClearBuffer(float red, float green, float blue);
-	void DrawIndexed(UINT count) noexcept(!IS_DEBUG);
+	void DrawIndexed(UINT count) noxnd;
 	void SetProjection(DirectX::FXMMATRIX proj) noexcept;
 	DirectX::XMMATRIX GetProjection() const noexcept;
 	void SetCamera(DirectX::FXMMATRIX cam) noexcept;

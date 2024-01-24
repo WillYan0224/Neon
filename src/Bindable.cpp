@@ -1,21 +1,24 @@
 #include "Bindable.h"
 #include <stdexcept>
 
-ID3D11DeviceContext* Bindable::GetDeviceContext(Graphics& gfx) noexcept
+namespace Bind
 {
-	return gfx.pDeviceContext.Get();
-}
+	ID3D11DeviceContext* Bindable::GetDeviceContext(Graphics& gfx) noexcept
+	{
+		return gfx.pDeviceContext.Get();
+	}
 
-ID3D11Device* Bindable::GetDevice(const Graphics& gfx) noexcept
-{
-	return gfx.pDevice.Get();
-}
+	ID3D11Device* Bindable::GetDevice(const Graphics& gfx) noexcept
+	{
+		return gfx.pDevice.Get();
+	}
 
-DxgiInfoManager& Bindable::GetInfoManager(const Graphics& gfx) noexcept(IS_DEBUG)
-{
+	DxgiInfoManager& Bindable::GetInfoManager(const Graphics& gfx) noexcept(IS_DEBUG)
+	{
 #ifndef NDEBUG
-	return gfx.infoManager;
+		return gfx.infoManager;
 #else
-	throw std::logic_error("Error! (tried to access gfx.infoManager in Release config)");
+		throw std::logic_error("Error! (tried to access gfx.infoManager in Release config)");
 #endif
+	}
 }

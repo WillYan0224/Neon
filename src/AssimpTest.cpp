@@ -1,10 +1,12 @@
 #include "AssimpTest.h"
 #include "BindableBase.h"
 #include "Macros\GraphicsMacro.h"
+#include "BindableCommon.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+using namespace Bind;
 AssTest::AssTest(Graphics& gfx, std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
@@ -16,11 +18,10 @@ AssTest::AssTest(Graphics& gfx, std::mt19937& rng,
 	TestObject(gfx, rng, adist, ddist, odist, rdist)
 {
 	namespace dx = DirectX;
-
 	if (!IsStaticInitialized())
 	{
-		using NEON::VertexLayout;
-		NEON::VertexBuffer vbuf(std::move(
+		using Dvtx::VertexLayout;
+		Dvtx::VertexBuffer vbuf(std::move(
 			VertexLayout{}
 			.Append(VertexLayout::Position3D)
 			.Append(VertexLayout::Normal)
