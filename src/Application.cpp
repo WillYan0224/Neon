@@ -35,6 +35,7 @@ Application::Application()
 void Application::DoFrame()
 {	
 	wnd.Gfx().RenderToTexture();
+	wnd.Gfx().ClearRenderTexture(0.5f, 0.3f,0.2f);
 	const auto dt = timer.Mark() * speed_factor;
 	wnd.Gfx().SetCamera(cam.GetMatrix());
 	light.Bind(wnd.Gfx(), cam.GetMatrix());

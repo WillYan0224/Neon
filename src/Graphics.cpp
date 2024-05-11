@@ -125,7 +125,7 @@ void Graphics::RenderToTexture() noexcept
 	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Adjust format as needed
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
-	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET; // Important for rendering to texture
+	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE; // Important for rendering to texture
 
 	pDevice->CreateTexture2D(&textureDesc, nullptr, &pTexture);
 
