@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "FlatSphere.h"
+
 
 
 #include <memory>
@@ -34,18 +34,7 @@ Application::Application()
 
 void Application::DoFrame()
 {	
-	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking;
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;	
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(5.0f, 5.0f));
-	ImGuiIO io = ImGui::GetIO();
-	ImGui::Begin("DockSpace Demo", nullptr, window_flags);
-	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-	{
-		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-	}
-
+	wnd.Gfx().RenderToTexture();
 	const auto dt = timer.Mark() * speed_factor;
 	wnd.Gfx().SetCamera(cam.GetMatrix());
 	light.Bind(wnd.Gfx(), cam.GetMatrix());
@@ -55,11 +44,19 @@ void Application::DoFrame()
 	light.Draw(wnd.Gfx());
 
 
-	ImGui::End();
+
+	wnd.Gfx().SwitchToBackBuffer();
+	wnd.Gfx().BeginFrame(0.07f, 0.3f, 0.12f);
+	wnd.Gfx().ShowTexture();
+	
+	ImGuiIO io = ImGui::GetIO();
+	
 	// imgui window to control camera
 	cam.SpawnControlWindow();
 	light.SpawnControlWindow();
 	ShowModelWindow();
+
+	
 
 	// imgui window to control simulation speed
 	if (ImGui::Begin("Simulation Speed"))
@@ -70,6 +67,7 @@ void Application::DoFrame()
 	}
 
 	wnd.Gfx().EndFrame();
+	
 }
 
 Application::~Application()

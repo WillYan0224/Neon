@@ -20,7 +20,7 @@ Graphics::Graphics( HWND hWnd)
 	ZeroMemory(&swapDesc, sizeof(swapDesc));
 	swapDesc.BufferDesc.Width = 0;
 	swapDesc.BufferDesc.Height = 0;
-	swapDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	swapDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -55,70 +55,14 @@ Graphics::Graphics( HWND hWnd)
 		nullptr,
 		&pDeviceContext
 	));
-
-	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
-	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
-	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pMainRtv));
-	pBackBuffer->Release();
-	
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Format = swapDesc.BufferDesc.Format;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MostDetailedMip = 0u;
-	srvDesc.Texture2D.MipLevels = 1u;
-	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
 	
 
 	D3D11_RASTERIZER_DESC rasDesc = {};
 	pDevice->CreateRasterizerState(&rasDesc, &pRasterizerState);
 	pDeviceContext->RSSetState(pRasterizerState.Get());
 
-	// Create depth stencil state
-	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
-	ZeroMemory(&dsDesc, sizeof(dsDesc));
-	dsDesc.DepthEnable = true;
-	dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	ComPtr<ID3D11DepthStencilState> pDSState;
-	GFX_THROW_INFO(pDevice->CreateDepthStencilState(&dsDesc, &pDSState));
-	// bind depth stencil state 
-	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
 	
-	// create depth stencil texture2D
-	ComPtr<ID3D11Texture2D> pDepthStencil;
-	D3D11_TEXTURE2D_DESC depthDesc = {};
-	ZeroMemory(&depthDesc, sizeof(depthDesc));
-	depthDesc.Width = 1280u;
-	depthDesc.Height = 760u;
-	depthDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	depthDesc.Usage = D3D11_USAGE_DEFAULT;
-	depthDesc.ArraySize = 1u;
-	depthDesc.MipLevels = 1u;
-	depthDesc.SampleDesc.Count = 1u;
-	depthDesc.SampleDesc.Quality = 0u;
-	GFX_THROW_INFO(pDevice->CreateTexture2D(&depthDesc, nullptr, &pDepthStencil));
-
-	// create depth stencil view desc
-	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-	ZeroMemory(&dsvDesc, sizeof(dsvDesc));
-	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
-	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-	dsvDesc.Texture2D.MipSlice = 0u;
-	GFX_THROW_INFO(pDevice->CreateDepthStencilView(pDepthStencil.Get(), &dsvDesc, &pDSV));
-
-	// bind render targets and depth stencil 
-	pDeviceContext->OMSetRenderTargets(1u, pMainRtv.GetAddressOf(), pDSV.Get());
 	
-	// configure viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = 1280.0f;
-	vp.Height = 760.0f;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0.0f;
-	vp.TopLeftY = 0.0f;
-	pDeviceContext->RSSetViewports(1u, &vp);
 
 	ImGui_ImplDX11_Init(pDevice.Get(), pDeviceContext.Get());
 }
@@ -171,6 +115,105 @@ bool Graphics::IsImguiEnabled() const noexcept
 	return imguiEnabled;
 }
 
+void Graphics::RenderToTexture() noexcept
+{
+	D3D11_TEXTURE2D_DESC textureDesc = {};
+	textureDesc.Width = 1000;
+	textureDesc.Height = 640;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM; // Adjust format as needed
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET; // Important for rendering to texture
+
+	pDevice->CreateTexture2D(&textureDesc, nullptr, &pTexture);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0u;
+	srvDesc.Texture2D.MipLevels = 1u;
+	pDevice->CreateShaderResourceView(pTexture.Get(), &srvDesc, &pTexSRV);
+
+	pDevice->CreateRenderTargetView(pTexture.Get(), nullptr, &pTexRTV);
+	
+	// Create depth stencil state
+	D3D11_DEPTH_STENCIL_DESC dsDesc = {};
+	ZeroMemory(&dsDesc, sizeof(dsDesc));
+	dsDesc.DepthEnable = true;
+	dsDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	ComPtr<ID3D11DepthStencilState> pDSState;
+	pDevice->CreateDepthStencilState(&dsDesc, &pDSState);
+	// bind depth stencil state 
+	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
+
+	// create depth stencil texture2D
+	ComPtr<ID3D11Texture2D> pDepthStencil;
+	D3D11_TEXTURE2D_DESC depthDesc = {};
+	ZeroMemory(&depthDesc, sizeof(depthDesc));
+	depthDesc.Width = 1000;
+	depthDesc.Height = 640;
+	depthDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthDesc.ArraySize = 1u;
+	depthDesc.MipLevels = 1u;
+	depthDesc.SampleDesc.Count = 1u;
+	depthDesc.SampleDesc.Quality = 0u;
+	pDevice->CreateTexture2D(&depthDesc, nullptr, &pDepthStencil);
+
+	// create depth stencil view desc
+	D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+	ZeroMemory(&dsvDesc, sizeof(dsvDesc));
+	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+	dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	dsvDesc.Texture2D.MipSlice = 0u;
+	pDevice->CreateDepthStencilView(pDepthStencil.Get(), &dsvDesc, &pDSV);
+
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = 1000;
+	vp.Height = 640.0f;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0.0f;
+	vp.TopLeftY = 0.0f;
+	pDeviceContext->RSSetViewports(1u, &vp);
+
+	// bind render targets and depth stencil 
+	pDeviceContext->OMSetRenderTargets(1u, pTexRTV.GetAddressOf(), pDSV.Get());
+}
+
+
+void Graphics::SwitchToBackBuffer() noexcept
+{
+	pDeviceContext->OMSetRenderTargets(0u, nullptr, nullptr);
+	pDeviceContext->OMSetRenderTargets(1u, pMainRtv.GetAddressOf(), nullptr);
+}
+
+void Graphics::ClearRenderTexture(float r, float g, float b) noexcept
+{
+	const float color[] = { r,g,b,1.0f };
+	pDeviceContext->ClearRenderTargetView(pTexRTV.Get(), color);
+	pDeviceContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+}
+
+
+ID3D11ShaderResourceView* Graphics::GetRenderTexture() const noexcept
+{
+	return pTexSRV.Get();
+}
+
+void Graphics::ShowTexture() noexcept
+{
+	ImGui::Begin("Texture");
+	ImGui::Image(pTexSRV.Get(), ImVec2(400, 400));
+	ImGui::End();
+}
+
+
 void Graphics::BeginFrame(float red, float green, float blue) noexcept
 {
 	// imgui begin frame
@@ -180,18 +223,27 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 	}
+	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
+	pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer);
+	pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pMainRtv);
+	pBackBuffer->Release();
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MostDetailedMip = 0u;
+	srvDesc.Texture2D.MipLevels = 1u;
+	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
+
+
 
 	const float color[] = { red,green,blue,1.0f };
 	pDeviceContext->ClearRenderTargetView(pMainRtv.Get(), color);
 	pDeviceContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-
 }
 
 void Graphics::EndFrame()
 {
-		ImGui::Begin("Viewport");
-		ImGui::Image((void*)pSRV.Get(), ImVec2(256,256));
-		ImGui::End();
 	// imgui frame end
 	if (imguiEnabled)
 	{

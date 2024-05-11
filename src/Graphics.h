@@ -74,6 +74,14 @@ public:
 	void EnableImgui() noexcept;
 	void DisableImgui() noexcept;
 	bool IsImguiEnabled() const noexcept;
+
+	void RenderToTexture() noexcept;
+	void ClearRenderTexture(float r, float g, float b) noexcept;
+	void SwitchToBackBuffer() noexcept;
+	void ShowTexture() noexcept;
+
+	ID3D11ShaderResourceView* GetRenderTexture() const noexcept;
+
 private:
 	DirectX::XMMATRIX projection;
 	DirectX::XMMATRIX camera;
@@ -85,6 +93,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pMainRtv = nullptr;
+	// render to tex
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTexRTV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pTexSRV = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> pTexture = nullptr;
+
+
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pSRV = nullptr;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizerState = nullptr;
