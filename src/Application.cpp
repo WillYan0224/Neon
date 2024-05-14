@@ -1,6 +1,4 @@
 #include "Application.h"
-#include "FlatSphere.h"
-
 
 #include <memory>
 #include <algorithm>
@@ -25,7 +23,7 @@ GDIPlusManager gdipm;
 
 Application::Application()
 	:
-	wnd(1280, 760, "DX11 Showcase"),
+	wnd(1600, 900, "DX11 Showcase"),
 	light(wnd.Gfx())
 {
 	
@@ -51,10 +49,19 @@ void Application::DoFrame()
 	light.Bind(wnd.Gfx(), cam.GetMatrix());
 	const auto transform = dx::XMMatrixRotationRollPitchYaw(pos.roll, pos.pitch, pos.yaw) *
 		dx::XMMatrixTranslation(pos.x, pos.y, pos.z);
+	
+	wnd.Gfx().SetViewport(1280.0f, 760.0f, 0.0f, 0.0f);
+	// Render to texture first
+	wnd.Gfx().RenderToTexture();
+	wnd.Gfx().SetRenderTarget();
+	wnd.Gfx().ClearBuffer(0.07f, 0.4f, 0.12f);
 	nano.Draw(wnd.Gfx(), transform);
 	light.Draw(wnd.Gfx());
-
-
+	
+	// swap back buffer
+	wnd.Gfx().SetBackBufferRenderTarget();
+	wnd.Gfx().ClearBackBuffer(0.12f, 0.12f, 0.12f);
+	wnd.Gfx().RenderViewports();
 	ImGui::End();
 	// imgui window to control camera
 	cam.SpawnControlWindow();

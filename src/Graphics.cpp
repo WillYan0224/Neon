@@ -56,18 +56,11 @@ Graphics::Graphics( HWND hWnd)
 		&pDeviceContext
 	));
 
-	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
-	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), &pBackBuffer));
-	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pMainRtv));
-	pBackBuffer->Release();
-	
-	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-	srvDesc.Format = swapDesc.BufferDesc.Format;
-	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MostDetailedMip = 0u;
-	srvDesc.Texture2D.MipLevels = 1u;
-	pDevice->CreateShaderResourceView(pBackBuffer.Get(), &srvDesc, &pSRV);
-	
+	// initializing back buffer
+	ComPtr<ID3D11Texture2D> BackBuffer;
+	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &BackBuffer));
+	GFX_THROW_INFO(pDevice->CreateRenderTargetView(BackBuffer.Get(), nullptr, &pMainRtv));
+
 
 	D3D11_RASTERIZER_DESC rasDesc = {};
 	pDevice->CreateRasterizerState(&rasDesc, &pRasterizerState);
@@ -111,22 +104,100 @@ Graphics::Graphics( HWND hWnd)
 	pDeviceContext->OMSetRenderTargets(1u, pMainRtv.GetAddressOf(), pDSV.Get());
 	
 	// configure viewport
-	D3D11_VIEWPORT vp;
-	vp.Width = 1280.0f;
-	vp.Height = 760.0f;
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 1.0f;
-	vp.TopLeftX = 0.0f;
-	vp.TopLeftY = 0.0f;
-	pDeviceContext->RSSetViewports(1u, &vp);
+	// D3D11_VIEWPORT vp;
+	// vp.Width = 1280.0f;
+	// vp.Height = 760.0f;
+	// vp.MinDepth = 0.0f;
+	// vp.MaxDepth = 1.0f;
+	// vp.TopLeftX = 0.0f;
+	// vp.TopLeftY = 0.0f;
+	// pDeviceContext->RSSetViewports(1u, &vp);
+	
 
 	ImGui_ImplDX11_Init(pDevice.Get(), pDeviceContext.Get());
 }
 
-void Graphics::ClearBuffer(float red, float green, float blue)
+void Graphics::SetViewport(float width, float height, float TLX, float TLY) const noexcept
+{
+	D3D11_VIEWPORT vp;
+	vp.Width = width;
+	vp.Height = height;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = TLX;
+	vp.TopLeftY = TLY;
+	pDeviceContext->RSSetViewports(1u, &vp);
+}
+
+void Graphics::RenderToTexture()
+{
+	ComPtr<ID3D11Texture2D> pTexture;
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	ZeroMemory(&texDesc, sizeof(texDesc));
+	texDesc.Width = 1280u;
+	texDesc.Height = 760u;
+	texDesc.MipLevels = 1u;
+	texDesc.ArraySize = 1u;
+	texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+	texDesc.SampleDesc.Count = 1u;
+	texDesc.SampleDesc.Quality = 0u;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0u;
+	texDesc.MiscFlags = 0u;
+	pDevice->CreateTexture2D(&texDesc, nullptr, &pTexture);
+
+	// create shader resource view
+	D3D11_SHADER_RESOURCE_VIEW_DESC texSRVDesc = {};
+	texSRVDesc.Format = texDesc.Format;
+	texSRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	texSRVDesc.Texture2D.MostDetailedMip = 0u;
+	texSRVDesc.Texture2D.MipLevels = 1u;
+	pDevice->CreateShaderResourceView(pTexture.Get(), &texSRVDesc, &pTexSRV);
+
+	// create render target view
+	D3D11_RENDER_TARGET_VIEW_DESC texRtvDesc = {};
+	ZeroMemory(&texRtvDesc, sizeof(texRtvDesc));
+	texRtvDesc.Format = texDesc.Format;
+	texRtvDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	texRtvDesc.Texture2D.MipSlice = 0u;
+	pDevice->CreateRenderTargetView(pTexture.Get(), &texRtvDesc, &pTexRTV);
+
+}
+
+void Graphics::ClearTexture(float red, float green, float blue)
+{
+}
+
+void Graphics::SetRenderTarget()
+{
+	pDeviceContext->OMSetRenderTargets(1u, pTexRTV.GetAddressOf(), pDSV.Get());
+}
+
+void Graphics::SetBackBufferRenderTarget()
+{
+	pDeviceContext->OMSetRenderTargets(1u, pMainRtv.GetAddressOf(), nullptr);
+}
+
+void Graphics::ClearBackBuffer(float red, float green, float blue)
 {
 	const float color[] = { red, green, blue, 1.0f };
 	pDeviceContext->ClearRenderTargetView(pMainRtv.Get(), color);
+	pDeviceContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
+}
+
+void Graphics::RenderViewports()
+{
+	ImGui::Begin("Viewport");
+	ImGui::Image((void*)pTexSRV.Get(), ImVec2(1280, 760));
+	ImGui::End();
+}
+
+
+void Graphics::ClearBuffer(float red, float green, float blue)
+{
+	const float color[] = { red, green, blue, 1.0f };
+	pDeviceContext->ClearRenderTargetView(pTexRTV.Get(), color);
 	pDeviceContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
@@ -180,11 +251,13 @@ void Graphics::BeginFrame(float red, float green, float blue) noexcept
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 	}
-
-	const float color[] = { red,green,blue,1.0f };
-	pDeviceContext->ClearRenderTargetView(pMainRtv.Get(), color);
-	pDeviceContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
-
+	// resize render target view on window resize
+	if (pMainRtv.Get() == nullptr)
+	{
+		ComPtr<ID3D11Texture2D> BackBuffer;
+		pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), &BackBuffer);
+		pDevice->CreateRenderTargetView(BackBuffer.Get(), nullptr, &pMainRtv);
+	}
 }
 
 void Graphics::EndFrame()

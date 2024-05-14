@@ -59,8 +59,8 @@ Window::Window( int width, int height, const char* name )
 	
 	hWnd = CreateWindow(
 		WindowClass::GetName(), name,
-		//WS_OVERLAPPEDWINDOW ,
-		WS_VISIBLE | WS_CAPTION | WS_SYSMENU ,
+		WS_OVERLAPPEDWINDOW ,
+		//WS_VISIBLE | WS_CAPTION | WS_SYSMENU ,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this
 	);
