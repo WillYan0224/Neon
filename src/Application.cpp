@@ -27,7 +27,8 @@ Application::Application()
 	light(wnd.Gfx())
 {
 	
-	wnd.Gfx().SetProjection( dx::XMMatrixPerspectiveLH( 1.0f, 9.0 / 16.0,0.5f,40.0f ) );
+//	wnd.Gfx().SetProjection( dx::XMMatrixPerspectiveLH( 1.0f, 9.0 / 16.0,0.5f,40.0f ) );
+	wnd.Gfx().SetProjection(dx::XMMatrixPerspectiveFovLH(90.0f * (NEON::PI / 180), 16 / 9.0f, 1.0f, 40.0f));
 }
 
 void Application::DoFrame()
@@ -37,7 +38,9 @@ void Application::DoFrame()
 	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;	
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(5.0f, 5.0f));
 	ImGuiIO io = ImGui::GetIO();
-	ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+	ImGui::SetNextWindowPos(ImVec2(0, 0));
+	ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
+	ImGui::Begin("DockSpace Demo", nullptr, window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	{
 		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
